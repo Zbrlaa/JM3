@@ -56,14 +56,14 @@ public class HelloShawn extends SimpleApplication{
 		rootNode.attachChild(sky);
 
 		bateau = assetManager.loadModel("Models/Boat/boat.j3o");
-	bateau.setLocalTranslation(0, 0, 0); // Position initiale
-	rootNode.attachChild(bateau); // Ajouter le bateau à la scène
+		bateau.setLocalTranslation(0, 0, 0); // Position initiale
+		rootNode.attachChild(bateau); // Ajouter le bateau à la scène
 
 	// Assigner les touches pour le mouvement
-	inputManager.addMapping("Avancer", new KeyTrigger(KeyInput.KEY_W));  // ZQSD ou WASD
-	inputManager.addMapping("Reculer", new KeyTrigger(KeyInput.KEY_S));
-	inputManager.addMapping("Gauche", new KeyTrigger(KeyInput.KEY_A));
-	inputManager.addMapping("Droite", new KeyTrigger(KeyInput.KEY_D));
+	// inputManager.addMapping("Avancer", new KeyTrigger(KeyInput.KEY_W));  // ZQSD ou WASD
+	// inputManager.addMapping("Reculer", new KeyTrigger(KeyInput.KEY_S));
+	// inputManager.addMapping("Gauche", new KeyTrigger(KeyInput.KEY_A));
+	// inputManager.addMapping("Droite", new KeyTrigger(KeyInput.KEY_D));
 
 	// Associer les actions aux touches
 	//inputManager.addListener(analogListener, "Avancer", "Reculer", "Gauche", "Droite");
@@ -124,8 +124,8 @@ public class HelloShawn extends SimpleApplication{
 	@Override
 	public void start() {
 		AppSettings settings = new AppSettings(true);
-		settings.setWidth(1480); // Largeur de la fenêtre
-		settings.setHeight(800); // Hauteur de la fenêtre
+		settings.setWidth(1920); // Largeur de la fenêtre
+		settings.setHeight(1080); // Hauteur de la fenêtre
 		settings.setFullscreen(false); // Désactive le mode plein écran
 		setSettings(settings);
 		super.start();
