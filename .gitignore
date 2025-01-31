@@ -1,0 +1,45 @@
+# === Java / JMonkeyEngine ===
+*.class
+*.log
+*.lock
+*.iml
+*.iws
+*.ipr
+
+# === Build directories ===
+bin/
+build/
+target/
+out/
+
+# === IDEs ===
+.idea/
+*.swp
+*.swo
+*.swn
+.vscode/
+*.bak
+
+# === Maven ===
+.mvn/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.next
+release.properties
+
+# === Gradle ===
+.gradle/
+gradle-app.setting
+gradle-wrapper.jar
+gradle-wrapper.properties
+
+# === JMonkeyEngine Specific ===
+assets/*.import.xml
+assets/Textures/*.dds
+assets/Models/*.gltf
+assets/Scenes/*.j3o
+
+# === OS-specific ===
+.DS_Store
+Thumbs.db
+ehthumbs.db

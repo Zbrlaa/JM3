@@ -18,7 +18,7 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
-  
+
 	<developers>
 		<developer>
 			<id>jseinturier</id>
@@ -35,7 +35,7 @@
 			<properties><!-- <picUrl>http://www.example.com/jdoe/pic</picUrl> --></properties>
 		</developer>
 	</developers>
-  
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		
@@ -53,12 +53,17 @@
 		<maven.plugin.javadoc.version>3.11.2</maven.plugin.javadoc.version>
 		<maven.plugin.release.version>3.1.1</maven.plugin.release.version>
 		<maven.plugin.source.version>3.3.1</maven.plugin.source.version>	
-        <maven.plugin.assembly.version>3.7.1</maven.plugin.assembly.version>		
+		<maven.plugin.assembly.version>3.7.1</maven.plugin.assembly.version>		
 	</properties>
 
-  
 	<dependencies>
-  
+		<dependency>
+			<groupId>com.simsilica</groupId>
+			<artifactId>lemur</artifactId>
+			<version>1.16.0</version>
+		</dependency>
+
+
 		<!-- JMonkeyEngine -->   
 		<dependency>
 			<groupId>${jme3_g}</groupId>
@@ -126,7 +131,7 @@
 			<version>${jme3_v}</version>
 		</dependency>	
 	</dependencies>
-  
+
 	<build>
 		<plugins>
 
@@ -171,7 +176,7 @@
 					</additionalJOptions>
 					<header>'&lt;script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"&gt;&lt;/script&gt;'</header>
 				</configuration>  
-  
+
 				<executions>
 					<execution>
 						<id>attach-javadocs</id>
@@ -181,7 +186,7 @@
 					</execution>
 				</executions>
 			</plugin>
-	 
+	
 			<!-- Software distribution -->
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
