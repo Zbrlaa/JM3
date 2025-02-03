@@ -21,6 +21,7 @@ import com.simsilica.lemur.Label;
 import com.simsilica.lemur.ProgressBar;
 
 
+@SuppressWarnings("unused")
 public class SystemeSolaire extends SimpleApplication {
 	private List<Planet> planets;
 	private float timeV;
@@ -39,7 +40,6 @@ public class SystemeSolaire extends SimpleApplication {
 	@Override
 	public void simpleInitApp(){
 		camPlanet = 0;
-		initButton();
 
 		GuiGlobals.initialize(this); // Initialisation Lemur
 		Label label = new Label("Système Solaire !!");
@@ -53,7 +53,6 @@ public class SystemeSolaire extends SimpleApplication {
 		inputManager.addMapping("Increase", new KeyTrigger(KeyInput.KEY_UP));
 		inputManager.addMapping("Decrease", new KeyTrigger(KeyInput.KEY_DOWN));
 		inputManager.addListener(actionListener, "Increase", "Decrease");
-
 
 		inputManager.addMapping("camPlus", new KeyTrigger(KeyInput.KEY_RIGHT));
 		inputManager.addMapping("camMoins", new KeyTrigger(KeyInput.KEY_LEFT));
@@ -123,14 +122,14 @@ public class SystemeSolaire extends SimpleApplication {
 		Planet deimos = new Planet(
 			"Lune", 0.04f, 4f,
 			List.of(0f, 6.0f, 0f),
-			List.of(0f, 0.2f, 0f),
+			List.of(0f, 0.3f, 0f),
 			assetManager
 		);
 		planets.get(4).addMoon(deimos);
 
 		//Jupiter
 		planets.add(new Planet(
-			"Jupiter", 11.2f, 60f,
+			"Jupiter", 2.2f, 60f,
 			List.of(0f, 0.084f, 0f),
 			List.of(0f, 2.5f, 0f),
 			assetManager
@@ -155,7 +154,7 @@ public class SystemeSolaire extends SimpleApplication {
 
 		//Saturne
 		planets.add(new Planet(
-			"Saturne", 9.45f, 80f,
+			"Saturne", 3.45f, 80f,
 			List.of(0f, 0.034f, 0f),
 			List.of(0f, 2.3f, 0f),
 			assetManager
@@ -163,7 +162,7 @@ public class SystemeSolaire extends SimpleApplication {
 
 		//Uranus
 		planets.add(new Planet(
-			"Uranus", 4.0f, 100f,
+			"Uranus", 2.0f, 100f,
 			List.of(0f, 0.0119f, 0f),
 			List.of(0f, 1.4f, 0f),
 			assetManager
@@ -171,7 +170,7 @@ public class SystemeSolaire extends SimpleApplication {
 
 		//Neptune
 		planets.add(new Planet(
-			"Neptune", 3.9f, 120f,
+			"Neptune", 2.9f, 120f,
 			List.of(0f, 0.006f, 0f),
 			List.of(0f, 1.5f, 0f),
 			assetManager
@@ -201,7 +200,12 @@ public class SystemeSolaire extends SimpleApplication {
 			p.rotateMoon(time);
 		}
 
-		timeLabel.setText("Vue planete : " + planets.get(camPlanet).getName());
+		try {
+			timeLabel.setText("Vue planete : " + planets.get(Math.floorMod(camPlanet,planets.size())).getName());
+		} catch (Exception e) {
+			System.out.println("Update :\n" + e);
+		}
+		
 	}
 
 	@Override
@@ -233,31 +237,26 @@ public class SystemeSolaire extends SimpleApplication {
 		@Override
 		public void onAction(String name, boolean isPressed, float tpf) {
 			if (isPressed) {
-				if (name.equals("camPlus")) {
-					camPlanet += 1;
-					if (camPlanet>8) {
-						camPlanet -=9;
-					}
-					changeCam(camPlanet);
+				if(name.equals("camPlus")){
+					camPlanet++;
 				}
-				if (name.equals("camMoins")) {
-					camPlanet -= 1;
-					if (camPlanet<0) {
-						camPlanet +=9;
-					}
-					changeCam(camPlanet);
+				if(name.equals("camMoins")){
+					camPlanet--;
 				}
+				try {
+					camPlanet = Math.floorMod(camPlanet,planets.size());//Pour modulo pas negatif
+					changeCam(camPlanet);
+				} catch (Exception e) {
+					System.out.println("Action :\n" + e);
+				}
+				
 			}
 		}
 	};
 
 	private void gestionCam(){
-		// flyCam.setEnabled(false);
-		// flyCam.setDragToRotate(true);
-		// cam.setLocation(new Vector3f(0, 150, 0));
-		// cam.lookAt(new Vector3f(0, 0, 0), Vector3f.UNIT_Y);
-
 		flyCam.setEnabled(false);
+
 		chaseCam = new ChaseCamera(cam, planets.get(camPlanet).getPlanet(), inputManager);
 		chaseCam.setDefaultDistance(50f); // Distance initiale
 		chaseCam.setMaxDistance(200f); // Distance max
@@ -271,15 +270,15 @@ public class SystemeSolaire extends SimpleApplication {
 		chaseCam.setSpatial(planets.get(camPlanet).getPlanet());
 	}
 
-	private void initButton() {
-		Quad quad = new Quad(200, 10); // Taille du bouton
-		button = new Geometry("Button", quad);
+	// private void initButton() {
+	// 	Quad quad = new Quad(200, 10); // Taille du bouton
+	// 	button = new Geometry("Button", quad);
 		
-		Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-		mat.setColor("Color", ColorRGBA.Blue); // Bouton bleu
-		button.setMaterial(mat);
+	// 	Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+	// 	mat.setColor("Color", ColorRGBA.Blue); // Bouton bleu
+	// 	button.setMaterial(mat);
 		
-		button.setLocalTranslation(100, 100, 0); // Position en bas de l'écran
-		guiNode.attachChild(button);
-	}
+	// 	button.setLocalTranslation(100, 100, 0); // Position en bas de l'écran
+	// 	guiNode.attachChild(button);
+	// }
 }
