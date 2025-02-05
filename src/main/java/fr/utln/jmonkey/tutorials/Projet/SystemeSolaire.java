@@ -8,27 +8,46 @@ import com.jme3.input.ChaseCamera;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
+import com.jme3.light.AmbientLight;
+import com.jme3.light.PointLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
+import com.jme3.post.FilterPostProcessor;
+import com.jme3.post.filters.BloomFilter;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Quad;
 import com.jme3.system.AppSettings;
+import com.jme3.texture.Texture;
+import com.jme3.util.SkyFactory;
+import com.simsilica.lemur.Axis;
+import com.simsilica.lemur.Button;
+import com.simsilica.lemur.Command;
+import com.simsilica.lemur.Container;
 import com.simsilica.lemur.GuiGlobals;
 import com.simsilica.lemur.Label;
 import com.simsilica.lemur.ProgressBar;
+import com.simsilica.lemur.component.SpringGridLayout;
+import com.simsilica.lemur.core.GuiComponent;
+import com.simsilica.lemur.core.GuiLayout;
+
+import de.lessvoid.nifty.layout.manager.HorizontalLayout;
 
 
 @SuppressWarnings("unused")
 public class SystemeSolaire extends SimpleApplication {
 	private List<Planet> planets;
+	
 	private float timeV;
-	private int camPlanet;
+	private int presentTime;
+	private float actualTime;
 
-	private ChaseCamera chaseCam;
+	private int camPlanet;
+	private Label planetLabel;
 	private Label timeLabel;
+	private ChaseCamera chaseCam;
 
 	private Geometry button;
 
@@ -39,31 +58,42 @@ public class SystemeSolaire extends SimpleApplication {
 
 	@Override
 	public void simpleInitApp(){
+		presentTime = 0;
+		actualTime = 0;
 		camPlanet = 0;
+		timeV = 1;
 
+		//Ciel
+		Texture skyTexture = assetManager.loadTexture("Planets/sky1.jpg");
+		Spatial sky = SkyFactory.createSky(assetManager, skyTexture, skyTexture, skyTexture, skyTexture, skyTexture, skyTexture);
+		rootNode.attachChild(sky);
+
+		//Titre Neuil
 		GuiGlobals.initialize(this); // Initialisation Lemur
 		Label label = new Label("Système Solaire !!");
-		label.setFontSize(20);
-		label.setColor(ColorRGBA.White);
-		label.setLocalTranslation(settings.getWidth()/2 , settings.getHeight() - 50, 0);
+		label.setFontSize(30);
+		label.setColor(ColorRGBA.Red);
+		label.setLocalTranslation(settings.getWidth()/2 - 100 , settings.getHeight() - 50, 0);
 		guiNode.attachChild(label);
 
+		//Lumiere Soleil
+		PointLight soleilLight = new PointLight();
+		soleilLight.setPosition(new Vector3f(0, 0, 0));
+		soleilLight.setColor(ColorRGBA.White.mult(10f));
+		soleilLight.setRadius(500f);
+		rootNode.addLight(soleilLight);
 
-		timeV = 1;
-		inputManager.addMapping("Increase", new KeyTrigger(KeyInput.KEY_UP));
-		inputManager.addMapping("Decrease", new KeyTrigger(KeyInput.KEY_DOWN));
-		inputManager.addListener(actionListener, "Increase", "Decrease");
-
-		inputManager.addMapping("camPlus", new KeyTrigger(KeyInput.KEY_RIGHT));
-		inputManager.addMapping("camMoins", new KeyTrigger(KeyInput.KEY_LEFT));
-		inputManager.addListener(actionListenerChaseCam, "camPlus", "camMoins");
+		// Lumière d'ambiance faible
+		AmbientLight ambient = new AmbientLight();
+		ambient.setColor(ColorRGBA.White.mult(0.05f));
+		rootNode.addLight(ambient);
 
 
 		planets = new ArrayList<>();
 
 		//Soleil
 		planets.add(new Planet(
-			"Soleil", 2f, 0f,
+			"Soleil", 4f, 0f,
 			List.of(0f, 0f, 0f),
 			List.of(0f, 0f, 0f),
 			assetManager
@@ -182,103 +212,199 @@ public class SystemeSolaire extends SimpleApplication {
 		}
 
 		gestionCam();
-		timeLabel = new Label("Vue planete : " + planets.get(camPlanet).getName());
-		timeLabel.setFontSize(20);
-		timeLabel.setColor(ColorRGBA.White);
-		timeLabel.setLocalTranslation(10, settings.getHeight() - 10, 0);
 	
-		guiNode.attachChild(timeLabel);
+		// // Création du PostProcessor
+		// FilterPostProcessor fpp = new FilterPostProcessor(assetManager);
+		// viewPort.addProcessor(fpp);
+
+		// // Ajout d'un effet de Glow (brillance)
+		// BloomFilter bloom = new BloomFilter(BloomFilter.GlowMode.Scene);
+		// fpp.addFilter(bloom);
+
+		addBoutonTemps();
+		addBoutonPlanetes();
+		addBoutonReset();
 	}
 
 	@Override
 	public void simpleUpdate(float tpf){
+		tpf /= 5;
 		float time = tpf * timeV;
+		actualTime += time;
+		presentTime += tpf;
 
 		for(Planet p : planets){
 			p.rotate(time);
 			p.rotateSelf(time);
 			p.rotateMoon(time);
 		}
-
-		try {
-			timeLabel.setText("Vue planete : " + planets.get(Math.floorMod(camPlanet,planets.size())).getName());
-		} catch (Exception e) {
-			System.out.println("Update :\n" + e);
-		}
-		
 	}
 
 	@Override
 	public void start(){
+		// setShowSettings(true);
+
+		
+		setDisplayStatView(false);
+		setDisplayFps(true);
+
 		AppSettings settings = new AppSettings(true);
-		settings.setWidth(1900); // Largeur de la fenêtre
-		settings.setHeight(1000); // Hauteur de la fenêtre
+		// settings.setWidth(1900); // Largeur de la fenêtre
+		// settings.setHeight(1000); // Hauteur de la fenêtre
 		settings.setFullscreen(true); // Désactive le mode plein écran
+		settings.setCenterWindow(true);
+		settings.setResolution(1920,1080);
 		setSettings(settings);
 		super.start();
 	}
 
-	// ActionListener pour gérer l'augmentation et la diminution de la variable
-	private ActionListener actionListener = new ActionListener(){
-		@Override
-		public void onAction(String name, boolean isPressed, float tpf) {
-			if (isPressed) {
-				if (name.equals("Increase")) {
-					timeV += 1;
-				}
-				if (name.equals("Decrease")) {
-					timeV -= 1;
-				}
-			}
-		}
-	};
-
-	private ActionListener actionListenerChaseCam = new ActionListener(){
-		@Override
-		public void onAction(String name, boolean isPressed, float tpf) {
-			if (isPressed) {
-				if(name.equals("camPlus")){
-					camPlanet++;
-				}
-				if(name.equals("camMoins")){
-					camPlanet--;
-				}
-				try {
-					camPlanet = Math.floorMod(camPlanet,planets.size());//Pour modulo pas negatif
-					changeCam(camPlanet);
-				} catch (Exception e) {
-					System.out.println("Action :\n" + e);
-				}
-				
-			}
-		}
-	};
-
 	private void gestionCam(){
 		flyCam.setEnabled(false);
-
 		chaseCam = new ChaseCamera(cam, planets.get(camPlanet).getPlanet(), inputManager);
-		chaseCam.setDefaultDistance(50f); // Distance initiale
-		chaseCam.setMaxDistance(200f); // Distance max
-		chaseCam.setMinDistance(10f); // Distance min
+		chaseCam.setHideCursorOnRotate(false);
+		chaseCam.setInvertVerticalAxis(true);
 		chaseCam.setZoomSensitivity(2f); // Sensibilité zoom
 		chaseCam.setRotationSpeed(3f); // Vitesse de rotation
-		chaseCam.setLookAtOffset(new Vector3f(0, 5, 0));
+
+		changeCam(camPlanet);
+		//chaseCam.setLookAtOffset(new Vector3f(0, 5, 0));
 	}
 
 	private void changeCam(int camPlanet){
+		float size = planets.get(camPlanet).getSize();
 		chaseCam.setSpatial(planets.get(camPlanet).getPlanet());
+		chaseCam.setDefaultDistance(size*10);
+		chaseCam.setMaxDistance(size*50);
+		chaseCam.setMinDistance(size*5);
 	}
 
-	// private void initButton() {
-	// 	Quad quad = new Quad(200, 10); // Taille du bouton
-	// 	button = new Geometry("Button", quad);
+
+	private void resetCam(){
+		camPlanet = 0;
+		changeCam(camPlanet);
+		planetLabel.setText(planets.get(Math.floorMod(camPlanet,planets.size())).getName());
+
+		chaseCam.setDefaultDistance(250);
+		chaseCam.setMaxDistance(500);
+		chaseCam.setMinDistance(200);
+	}
+
+	private void resetTime(){
+		float time = presentTime - actualTime;
+		timeV = 1;
+		actualTime = 0;
+		timeLabel.setText("x"+(int)timeV);
+
+		for(Planet p : planets){
+			p.rotate(time);
+			p.rotateSelf(time);
+			p.rotateMoon(time);
+		}
+	}
+
+	
+	private void addBoutonTemps(){
+		Container container = new Container();
+
+		timeLabel = new Label("x"+(int)timeV);
+		timeLabel.setFontSize(20);
+		timeLabel.setColor(ColorRGBA.White);
+
+		Button btnAccelerer = new Button("->");
+		btnAccelerer.addClickCommands(new Command<Button>() {
+			@Override
+			public void execute(Button source) {
+				timeV ++;
+				timeLabel.setText("x"+(int)timeV);
+			}
+		});
+
+		Button btnRalentir = new Button("<-");
+		btnRalentir.addClickCommands(new Command<Button>() {
+			@Override
+			public void execute(Button source) {
+				timeV --;
+				timeLabel.setText("x"+(int)timeV);
+			}
+		});
+
 		
-	// 	Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-	// 	mat.setColor("Color", ColorRGBA.Blue); // Bouton bleu
-	// 	button.setMaterial(mat);
-		
-	// 	button.setLocalTranslation(100, 100, 0); // Position en bas de l'écran
-	// 	guiNode.attachChild(button);
-	// }
+		container.addChild(btnRalentir);
+		container.addChild(timeLabel);
+		container.addChild(btnAccelerer);
+		guiNode.attachChild(container);
+		container.setLocalTranslation(60, cam.getHeight() - 100, 0);
+		container.setLayout(new SpringGridLayout(Axis.X, Axis.Y));
+		btnRalentir.setLocalTranslation(0, 0, 0);
+		timeLabel.setLocalTranslation(30, 0, 0);
+		btnAccelerer.setLocalTranslation(80, 0, 0);
+	}
+
+
+	private void addBoutonPlanetes(){
+		Container container = new Container();
+
+		planetLabel = new Label(planets.get(Math.floorMod(camPlanet,planets.size())).getName());
+		planetLabel.setFontSize(20);
+		planetLabel.setColor(ColorRGBA.White);
+
+		Button btnAccelerer = new Button("->");
+		btnAccelerer.addClickCommands(new Command<Button>() {
+			@Override
+			public void execute(Button source) {
+				camPlanet++;
+				camPlanet = Math.floorMod(camPlanet,planets.size());//Pour modulo pas negatif
+				changeCam(camPlanet);
+				planetLabel.setText(planets.get(Math.floorMod(camPlanet,planets.size())).getName());
+			}
+		});
+
+		Button btnRalentir = new Button("<-");
+		btnRalentir.addClickCommands(new Command<Button>() {
+			@Override
+			public void execute(Button source) {
+				camPlanet--;
+				camPlanet = Math.floorMod(camPlanet,planets.size());//Pour modulo pas negatif
+				changeCam(camPlanet);
+				planetLabel.setText(planets.get(Math.floorMod(camPlanet,planets.size())).getName());
+			}
+		});
+
+		container.addChild(btnRalentir);
+		container.addChild(planetLabel);
+		container.addChild(btnAccelerer);
+		guiNode.attachChild(container);
+		container.setLocalTranslation(60, cam.getHeight() - 140, 0);
+		container.setLayout(new SpringGridLayout(Axis.X, Axis.Y));
+		btnRalentir.setLocalTranslation(0, 0, 0);
+		planetLabel.setLocalTranslation(30, 0, 0);
+		btnAccelerer.setLocalTranslation(120, 0, 0);
+		// container.setBorder(null);
+	}
+
+
+	private void addBoutonReset(){
+		Container container = new Container();
+
+		Button btnResetTime = new Button("Reset Time");
+		btnResetTime.addClickCommands(new Command<Button>() {
+			@Override
+			public void execute(Button source) {
+				resetTime();
+			}
+		});
+
+		Button btnResetCam = new Button("Reset Cam");
+		btnResetCam.addClickCommands(new Command<Button>() {
+			@Override
+			public void execute(Button source) {
+				resetCam();
+			}
+		});
+
+		container.addChild(btnResetTime);
+		container.addChild(btnResetCam);
+		guiNode.attachChild(container);
+		container.setLocalTranslation(60, cam.getHeight() - 180, 0);
+	}
 }

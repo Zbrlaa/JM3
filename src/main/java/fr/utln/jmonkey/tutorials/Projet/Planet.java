@@ -46,8 +46,20 @@ public class Planet {
 		planet = new Geometry(name, sphere);
 		
 		//Utilisation de la texture
-		Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-		mat.setTexture("ColorMap", assetManager.loadTexture("Planets/" + name + ".jpg"));
+		String m;
+		String mt;
+		if(name.equals("Soleil")){
+			m = "Misc/Unshaded";
+			mt = "ColorMap";
+		}
+		else{
+			m = "Light/Lighting";
+			mt = "DiffuseMap";
+		}
+
+		Material mat = new Material(assetManager, "Common/MatDefs/" + m + ".j3md");
+		mat.setTexture(mt, assetManager.loadTexture("Planets/" + name + ".jpg"));
+
 		planet.setMaterial(mat);
 		node.attachChild(planet);
 	}
@@ -84,7 +96,6 @@ public class Planet {
 				m.rotateSelf(tpf);
 			}
 		}
-		
 	}
 
 
