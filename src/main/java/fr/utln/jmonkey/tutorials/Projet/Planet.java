@@ -1,10 +1,14 @@
 package fr.utln.jmonkey.tutorials.Projet;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Sphere;
@@ -82,7 +86,29 @@ public class Planet {
 
 
 	public void rotate(float tpf){
-		root.rotate(tpf*angles.get(0), tpf*angles.get(1), tpf*angles.get(2));
+		float e = 0.0167f; // Excentricité de la Terre
+		float a = 1f;      // Demi-grand axe
+		float T = 0.01f; // Période orbitale
+		T *= 24 * 3600;
+		double secondesDepuisRef = (System.currentTimeMillis() / 1000.0);
+		long millis = (long) (secondesDepuisRef * 1000);
+		Date date = new Date(millis);
+		System.out.println(date.toString());
+
+        //Anomalie moyenne (M)
+        float M = (float) (2 * Math.PI * (secondesDepuisRef% T) / T);
+        //Anomalie vraie θ
+        float theta = M + 2 * e * (float) Math.sin(M) + 1.25f * e * e * (float) Math.sin(2 * M);
+
+        float x = a * (float) Math.cos(theta);
+        float z = a * (float) Math.sqrt(1 - e * e) * (float) Math.sin(theta);
+
+		//root.rotate(tpf*angles.get(0), tpf*angles.get(1), tpf*angles.get(2));
+		// Vector3f pos = node.getLocalTranslation();
+
+		Vector3f newPos = new Vector3f(distance*x, 0f, distance*z);
+		System.out.println(newPos);
+		node.setLocalTranslation(newPos);
 	}
 
 	public void rotateSelf(float tpf){
