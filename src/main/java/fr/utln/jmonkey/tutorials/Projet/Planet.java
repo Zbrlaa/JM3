@@ -90,6 +90,7 @@ public class Planet {
 		float a = 1f;      // Demi-grand axe
 		float T = 0.01f; // Période orbitale
 		T *= 24 * 3600;
+		
 		double secondesDepuisRef = (System.currentTimeMillis() / 1000.0);
 		long millis = (long) (secondesDepuisRef * 1000);
 		Date date = new Date(millis);

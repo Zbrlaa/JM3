@@ -2,6 +2,7 @@ package fr.utln.jmonkey.tutorials.Projet;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.jme3.app.SimpleApplication;
@@ -228,13 +229,13 @@ public class SystemeSolaire extends SimpleApplication {
 		Date date = new Date(millis);
 		System.out.println(date.toString());
 	
-		actualTime += time;
+		// actualTime += time;
 		presentTime += tpf;
 
 		for(Planet p : planets){
 			p.rotate(timeV);
-			p.rotateSelf(time);
-			p.rotateMoon(time);
+			// p.rotateSelf(time);
+			// p.rotateMoon(time);
 		}
 
 		
