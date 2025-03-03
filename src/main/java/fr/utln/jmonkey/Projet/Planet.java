@@ -1,10 +1,13 @@
 package fr.utln.jmonkey.Projet;
 
+import org.json.JSONObject;
+
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
@@ -14,8 +17,6 @@ import com.jme3.scene.Node;
 import com.jme3.scene.shape.Sphere;
 
 public class Planet {
-	//A modif pour ajouter les models et textures
-
 	//Obligatoire
 	private String name;
 	//private ColorRGBA color;
@@ -30,6 +31,8 @@ public class Planet {
 	private Node node;//Noyau pour ses lunes
 	private List<Planet> moons;
 
+	//Remplis par l'Api
+	private double sizeR;
 	
 	//Constructeur
 	public Planet(String name, float size, float distance, List<Float> angles, List<Float> anglesSelf,AssetManager assetManager){
@@ -38,6 +41,16 @@ public class Planet {
 		this.distance = distance;
 		this.angles = angles;
 		this.anglesSelf = anglesSelf;
+
+		if (Set.of("terre","mercure","venus","mars","jupiter","saturne","neptune","uranus").contains(name.toLowerCase())){
+			Api api = new Api();
+			JSONObject planetData = api.getPlanetData(name.toLowerCase());
+			if (planetData != null) {
+				System.out.println("Données récupérées : " + planetData.toString(2));
+			} else {
+				System.out.println("Erreur lors de la récupération des données.");
+			}
+		}
 
 		initNodes();
 		initPlanet(assetManager);
@@ -73,7 +86,7 @@ public class Planet {
 		root = new Node(name + "Root");
 
 		root.attachChild(node);
-		node.setLocalTranslation(distance, 0, 0);
+		// node.setLocalTranslation(distance, 0, 0);
 	}
 
 	public void addMoon(Planet moon){
@@ -94,7 +107,7 @@ public class Planet {
 		double secondesDepuisRef = (System.currentTimeMillis() / 1000.0);
 		long millis = (long) (secondesDepuisRef * 1000);
 		Date date = new Date(millis);
-		System.out.println(date.toString());
+		// System.out.println(date.toString());
 
         //Anomalie moyenne (M)
         float M = (float) (2 * Math.PI * (secondesDepuisRef% T) / T);
@@ -108,7 +121,7 @@ public class Planet {
 		// Vector3f pos = node.getLocalTranslation();
 
 		Vector3f newPos = new Vector3f(distance*x, 0f, distance*z);
-		System.out.println(newPos);
+		// System.out.println(newPos);
 		node.setLocalTranslation(newPos);
 	}
 

@@ -12,27 +12,25 @@ public class Api {
 	private static final String CACHE_FILE = "planetes.json";
 
 	public static void main(String[] args) {
-		Api api = new Api();
-		String[] planetes = {"terre","mercure","venus","mars","jupiter","saturne","neptune","uranus"};
-		for(String planete : planetes){
-			JSONObject planetData = api.getPlanetData(planete);
-			if (planetData != null) {
-				System.out.println("Données récupérées : " + planetData.toString(2));
-			} else {
-				System.out.println("Erreur lors de la récupération des données.");
-			}
-		}
+		// Api api = new Api();
+		// String[] planetes = {"terre","mercure","venus","mars","jupiter","saturne","neptune","uranus"};
+		// for(String planete : planetes){
+		// 	JSONObject planetData = api.getPlanetData(planete);
+		// 	if (planetData != null) {
+		// 		System.out.println("Données récupérées : " + planetData.toString(2));
+		// 	} else {
+		// 		System.out.println("Erreur lors de la récupération des données.");
+		// 	}
+		// }
 	}
 
 	public JSONObject getPlanetData(String planetName) {
 		JSONObject allPlanets = loadCache();
 
 		if (allPlanets.has(planetName)) {
-			System.out.println("🔹 Chargement des données depuis le cache.");
 			return allPlanets.getJSONObject(planetName);
 		}
-
-		System.out.println("🌍 Récupération des données depuis l'API...");
+		
 		JSONObject planetData = fetchPlanetData(planetName);
 
 		if (planetData != null) {
@@ -76,7 +74,7 @@ public class Api {
 	private JSONObject extractUsefulData(JSONObject json) {
 		JSONObject usefulData = new JSONObject();
 		
-		usefulData.put("name", json.getString("englishName"));
+		usefulData.put("name", json.getString("id"));
 		usefulData.put("semiMajorAxis", json.getDouble("semimajorAxis"));
 		usefulData.put("eccentricity", json.getDouble("eccentricity"));
 		usefulData.put("orbitalPeriod", json.getDouble("sideralOrbit"));

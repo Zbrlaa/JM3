@@ -5,7 +5,7 @@
     "semiMajorAxis": 108208475,
     "orbitalPeriod": 224.701,
     "mass": 4.86747E+24,
-    "name": "Venus",
+    "name": "venus",
     "eccentricity": 0.0067
   },
   "uranus": {
@@ -14,7 +14,7 @@
     "semiMajorAxis": 2.870658186E9,
     "orbitalPeriod": 30685.4,
     "mass": 8.68127E25,
-    "name": "Uranus",
+    "name": "uranus",
     "eccentricity": 0.0457
   },
   "terre": {
@@ -23,7 +23,7 @@
     "semiMajorAxis": 149598023,
     "orbitalPeriod": 365.256,
     "mass": 5.97237E+24,
-    "name": "Earth",
+    "name": "terre",
     "eccentricity": 0.0167
   },
   "mars": {
@@ -32,7 +32,7 @@
     "semiMajorAxis": 2.279392E+8,
     "orbitalPeriod": 686.98,
     "mass": 6.417119999999999E+23,
-    "name": "Mars",
+    "name": "mars",
     "eccentricity": 0.0935
   },
   "saturne": {
@@ -41,7 +41,7 @@
     "semiMajorAxis": 1426666422,
     "orbitalPeriod": 10759.22,
     "mass": 5.6833600000000006E+26,
-    "name": "Saturn",
+    "name": "saturne",
     "eccentricity": 0.0565
   },
   "neptune": {
@@ -50,7 +50,7 @@
     "semiMajorAxis": 4498396441,
     "orbitalPeriod": 60189,
     "mass": 1.02413E+26,
-    "name": "Neptune",
+    "name": "neptune",
     "eccentricity": 0.0113
   },
   "mercure": {
@@ -59,7 +59,7 @@
     "semiMajorAxis": 5.790905E+7,
     "orbitalPeriod": 87.969,
     "mass": 3.30114E+23,
-    "name": "Mercury",
+    "name": "mercure",
     "eccentricity": 0.2056
   },
   "jupiter": {
@@ -68,7 +68,7 @@
     "semiMajorAxis": 778340821,
     "orbitalPeriod": 4332.589,
     "mass": 1.89819E+27,
-    "name": "Jupiter",
+    "name": "jupiter",
     "eccentricity": 0.0489
   }
 }

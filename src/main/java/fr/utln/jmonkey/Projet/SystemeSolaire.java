@@ -34,13 +34,16 @@ import de.lessvoid.nifty.layout.manager.HorizontalLayout;
 public class SystemeSolaire extends SimpleApplication {
 	private List<Planet> planets;
 	
-	private float timeV;
-	private float presentTime;
-	private float actualTime;
+	private int timeV;
+	private double refTime;
+	private double antTime;
+	private double cptTime;
+	private double actualTime;
 
 	private int camPlanet;
 	private Label planetLabel;
 	private Label timeLabel;
+	private Label dateLabel;
 	private ChaseCamera chaseCam;
 
 	private Geometry button;
@@ -52,8 +55,8 @@ public class SystemeSolaire extends SimpleApplication {
 
 	@Override
 	public void simpleInitApp(){
-		presentTime = 0;
-		actualTime = 0;
+		refTime = System.currentTimeMillis();
+		antTime = System.currentTimeMillis();
 		camPlanet = 0;
 		timeV = 1;
 
@@ -64,11 +67,11 @@ public class SystemeSolaire extends SimpleApplication {
 
 		//Titre Neuil
 		GuiGlobals.initialize(this); // Initialisation Lemur
-		Label label = new Label("Système Solaire !!");
-		label.setFontSize(30);
-		label.setColor(ColorRGBA.Red);
-		label.setLocalTranslation(settings.getWidth()/2 - 100 , settings.getHeight() - 50, 0);
-		guiNode.attachChild(label);
+		dateLabel = new Label("Date");
+		dateLabel.setFontSize(30);
+		dateLabel.setColor(ColorRGBA.Red);
+		dateLabel.setLocalTranslation(settings.getWidth()/2 - 100 , settings.getHeight() - 50, 0);
+		guiNode.attachChild(dateLabel);
 
 		//Lumiere Soleil
 		PointLight soleilLight = new PointLight();
@@ -222,30 +225,28 @@ public class SystemeSolaire extends SimpleApplication {
 
 	@Override
 	public void simpleUpdate(float tpf){
-		tpf /= 5;
-		
-		double secondesDepuisRef = (System.currentTimeMillis() / 1000.0);
-		long millis = (long) (secondesDepuisRef * 1000);
-		Date date = new Date(millis);
-		System.out.println(date.toString());
-	
-		// actualTime += time;
-		presentTime += tpf;
+		double actualTime = System.currentTimeMillis();
+		cptTime += (actualTime-antTime)*timeV;
+		antTime = actualTime;
+
+		double time = refTime+cptTime;
+
+		Date date = new Date((long)(time));
+		// System.out.println(actualTime-refTime);
+		// System.out.println(date.toString());
+		dateLabel.setText(date.toString());
 
 		for(Planet p : planets){
-			p.rotate(timeV);
+			// p.rotate(timeV);
 			// p.rotateSelf(time);
 			// p.rotateMoon(time);
 		}
-
-		
 	}
 
 	@Override
 	public void start(){
 		// setShowSettings(true);
 
-		
 		setDisplayStatView(false);
 		setDisplayFps(true);
 
@@ -291,16 +292,17 @@ public class SystemeSolaire extends SimpleApplication {
 	}
 
 	private void resetTime(){
-		float time = presentTime - actualTime;
+		refTime = System.currentTimeMillis();
+		antTime = System.currentTimeMillis();
+		cptTime = 0;
 		timeV = 1;
-		actualTime = 0;
 		timeLabel.setText("x"+(int)timeV);
 
-		for(Planet p : planets){
-			p.rotate(time);
-			p.rotateSelf(time);
-			p.rotateMoon(time);
-		}
+		// for(Planet p : planets){
+		// 	p.rotate(time);
+		// 	p.rotateSelf(time);
+		// 	p.rotateMoon(time);
+		// }
 	}
 
 	
@@ -315,7 +317,15 @@ public class SystemeSolaire extends SimpleApplication {
 		btnAccelerer.addClickCommands(new Command<Button>() {
 			@Override
 			public void execute(Button source) {
-				timeV ++;
+				if(timeV == -1){
+					timeV = 1;
+				}
+				else if(timeV < -1){
+					timeV /= 10;
+				}
+				else{
+					timeV *= 10;
+				}
 				timeLabel.setText("x"+(int)timeV);
 			}
 		});
@@ -324,7 +334,15 @@ public class SystemeSolaire extends SimpleApplication {
 		btnRalentir.addClickCommands(new Command<Button>() {
 			@Override
 			public void execute(Button source) {
-				timeV --;
+				if(timeV == 1){
+					timeV = -1;
+				}
+				else if(timeV > 1){
+					timeV /= 10;
+				}
+				else{
+					timeV *= 10;
+				}
 				timeLabel.setText("x"+(int)timeV);
 			}
 		});
