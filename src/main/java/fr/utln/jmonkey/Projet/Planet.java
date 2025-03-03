@@ -1,4 +1,4 @@
-package fr.utln.jmonkey.tutorials.Projet;
+package fr.utln.jmonkey.Projet;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;

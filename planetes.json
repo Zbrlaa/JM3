@@ -1,0 +1,74 @@
+{
+  "venus": {
+    "inclination": 3.39,
+    "meanRadius": 6051.8,
+    "semiMajorAxis": 108208475,
+    "orbitalPeriod": 224.701,
+    "mass": 4.86747E+24,
+    "name": "Venus",
+    "eccentricity": 0.0067
+  },
+  "uranus": {
+    "inclination": 0.772,
+    "meanRadius": 25362,
+    "semiMajorAxis": 2.870658186E9,
+    "orbitalPeriod": 30685.4,
+    "mass": 8.68127E25,
+    "name": "Uranus",
+    "eccentricity": 0.0457
+  },
+  "terre": {
+    "inclination": 0,
+    "meanRadius": 6371.0084,
+    "semiMajorAxis": 149598023,
+    "orbitalPeriod": 365.256,
+    "mass": 5.97237E+24,
+    "name": "Earth",
+    "eccentricity": 0.0167
+  },
+  "mars": {
+    "inclination": 1.85,
+    "meanRadius": 3389.5,
+    "semiMajorAxis": 2.279392E+8,
+    "orbitalPeriod": 686.98,
+    "mass": 6.417119999999999E+23,
+    "name": "Mars",
+    "eccentricity": 0.0935
+  },
+  "saturne": {
+    "inclination": 2.485,
+    "meanRadius": 58232,
+    "semiMajorAxis": 1426666422,
+    "orbitalPeriod": 10759.22,
+    "mass": 5.6833600000000006E+26,
+    "name": "Saturn",
+    "eccentricity": 0.0565
+  },
+  "neptune": {
+    "inclination": 1.769,
+    "meanRadius": 24622,
+    "semiMajorAxis": 4498396441,
+    "orbitalPeriod": 60189,
+    "mass": 1.02413E+26,
+    "name": "Neptune",
+    "eccentricity": 0.0113
+  },
+  "mercure": {
+    "inclination": 7,
+    "meanRadius": 2439.4,
+    "semiMajorAxis": 5.790905E+7,
+    "orbitalPeriod": 87.969,
+    "mass": 3.30114E+23,
+    "name": "Mercury",
+    "eccentricity": 0.2056
+  },
+  "jupiter": {
+    "inclination": 1.304,
+    "meanRadius": 69911,
+    "semiMajorAxis": 778340821,
+    "orbitalPeriod": 4332.589,
+    "mass": 1.89819E+27,
+    "name": "Jupiter",
+    "eccentricity": 0.0489
+  }
+}
