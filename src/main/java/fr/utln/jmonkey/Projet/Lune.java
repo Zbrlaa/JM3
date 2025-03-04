@@ -24,7 +24,7 @@ public class Lune {
 		this.rayon = rayon;
 		this.distance = distance;
 		
-		initNodes();
+		initNodes(distance);
 		initPlanet(rayon, assetManager);
 	}
 
@@ -40,11 +40,12 @@ public class Lune {
 		node.attachChild(planet);
 	}
 
-	private void initNodes(){
+	private void initNodes(double distance){
 		node = new Node(name + "Node");
 		root = new Node(name + "Root");
 
 		root.attachChild(node);
+		root.setLocalTranslation(5f, 0, 0);
 	}
 
 	public void rotate(double time){

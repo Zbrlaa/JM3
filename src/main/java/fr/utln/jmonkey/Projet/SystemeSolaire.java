@@ -94,11 +94,14 @@ public class SystemeSolaire extends SimpleApplication {
 		planets.add(new Planet("Mercure", assetManager));
 		planets.add(new Planet("Venus", assetManager));
 		planets.add(new Planet("Terre", assetManager));
+		((Planet)planets.get(3)).addlune(new Lune("Lune", 27.3217, 5.15f, 1737.4f, 384400d, assetManager));
 		planets.add(new Planet("Mars", assetManager));
 		planets.add(new Planet("Jupiter", assetManager));
 		planets.add(new Planet("Saturne", assetManager));
 		planets.add(new Planet("Uranus", assetManager));
 		planets.add(new Planet("Neptune", assetManager));
+
+
 
 		//Lunes de Mars Phobos Deimos
 		//Lunes de Jupiter Io Europa
