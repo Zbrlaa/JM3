@@ -24,11 +24,11 @@ public class Lune {
 		this.rayon = rayon;
 		this.distance = distance;
 		
-		initNodes(distance);
-		initPlanet(rayon, assetManager);
+		initNodes();
+		initPlanet(assetManager);
 	}
 
-	private void initPlanet(float rayon, AssetManager assetManager){
+	private void initPlanet(AssetManager assetManager){
 		Sphere sphere = new Sphere(32, 32, rayon);
 		planet = new Geometry(name, sphere);
 		
@@ -40,12 +40,13 @@ public class Lune {
 		node.attachChild(planet);
 	}
 
-	private void initNodes(double distance){
+	private void initNodes(){
 		node = new Node(name + "Node");
 		root = new Node(name + "Root");
 
 		root.attachChild(node);
-		root.setLocalTranslation(5f, 0, 0);
+		node.setLocalTranslation((float)distance, 0, 0);
+		root.rotate(0f, (float)Math.PI, (float)Math.PI);
 	}
 
 	public void rotate(double time){

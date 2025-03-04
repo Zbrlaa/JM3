@@ -91,21 +91,21 @@ public class SystemeSolaire extends SimpleApplication {
 		
 		planets = new ArrayList<>();
 		planets.add(new Etoile("Soleil", 6f, assetManager));
-		planets.add(new Planet("Mercure", assetManager));
-		planets.add(new Planet("Venus", assetManager));
-		planets.add(new Planet("Terre", assetManager));
-		((Planet)planets.get(3)).addlune(new Lune("Lune", 27.3217, 5.15f, 1737.4f, 384400d, assetManager));
-		planets.add(new Planet("Mars", assetManager));
-		planets.add(new Planet("Jupiter", assetManager));
-		planets.add(new Planet("Saturne", assetManager));
-		planets.add(new Planet("Uranus", assetManager));
-		planets.add(new Planet("Neptune", assetManager));
-
-
+		String[] P = {"Mercure", "Venus", "Terre", "Mars", "Jupiter", "Saturne", "Uranus", "Neptune"};
+		for(String s : P){
+			planets.add(new Planet(s, assetManager));
+		}
+	
+		((Planet)planets.get(3)).addlune(new Lune("Lune", 27.3217, 5.15f, 0.16f, 1.5d, assetManager));
 
 		//Lunes de Mars Phobos Deimos
-		//Lunes de Jupiter Io Europa
+		((Planet)planets.get(4)).addlune(new Lune("Phobos", 0.3189, 5.15f, 0.06f, 0.65d, assetManager));
+		((Planet)planets.get(4)).addlune(new Lune("Deimos", 1.2624, 5.15f, 0.04f, 0.8d, assetManager));
 
+		//Lunes de Jupiter Io Europa
+		((Planet)planets.get(5)).addlune(new Lune("Io", 1.7691, 5.15f, 0.3f, 10.5d, assetManager));
+		((Planet)planets.get(5)).addlune(new Lune("Europa", 3.5512, 5.15f, 0.25f, 12d, assetManager));
+		
 		for(Corp p : planets){
 			rootNode.attachChild(p.getRoot());
 			p.getPlanet().rotate(-FastMath.HALF_PI, 0, 0);

@@ -18,11 +18,11 @@ public class Etoile implements Corp{
 		this.radius = radius;
 	
 		initNodes();
-		initPlanet(radius, assetManager);
+		initPlanet(assetManager);
 	}
 
 	//Initialisations
-	private void initPlanet(float radius, AssetManager assetManager){
+	private void initPlanet(AssetManager assetManager){
 		Sphere sphere = new Sphere(32, 32, radius);
 		planet = new Geometry(name, sphere);
 		
