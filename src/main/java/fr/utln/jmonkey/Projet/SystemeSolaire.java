@@ -33,8 +33,7 @@ import de.lessvoid.nifty.layout.manager.HorizontalLayout;
 
 @SuppressWarnings("unused")
 public class SystemeSolaire extends SimpleApplication {
-	private List<Planet> planets;
-	private Etoile soleil;
+	private List<Corp> planets;
 	
 	private int timeV;
 	private double refTime;
@@ -58,6 +57,7 @@ public class SystemeSolaire extends SimpleApplication {
 
 	@Override
 	public void simpleInitApp(){
+		formatDate = new SimpleDateFormat("dd|MM|yyyy HH:mm:ss");
 		refTime = System.currentTimeMillis();
 		antTime = System.currentTimeMillis();
 		camPlanet = 0;
@@ -68,7 +68,7 @@ public class SystemeSolaire extends SimpleApplication {
 		Spatial sky = SkyFactory.createSky(assetManager, skyTexture, skyTexture, skyTexture, skyTexture, skyTexture, skyTexture);
 		rootNode.attachChild(sky);
 
-		//Titre Neuil
+		//Date
 		GuiGlobals.initialize(this); // Initialisation Lemur
 		dateLabel = new Label("Date");
 		dateLabel.setFontSize(30);
@@ -80,17 +80,17 @@ public class SystemeSolaire extends SimpleApplication {
 		PointLight soleilLight = new PointLight();
 		soleilLight.setPosition(new Vector3f(0, 0, 0));
 		soleilLight.setColor(ColorRGBA.White.mult(10f));
-		soleilLight.setRadius(500f);
+		soleilLight.setRadius(2000f);
 		rootNode.addLight(soleilLight);
 
 		// Lumière d'ambiance faible
 		AmbientLight ambient = new AmbientLight();
-		ambient.setColor(ColorRGBA.White.mult(0.01f));
+		ambient.setColor(ColorRGBA.White.mult(0.04f));
 		rootNode.addLight(ambient);
 
-
+		
 		planets = new ArrayList<>();
-
+		planets.add(new Etoile("Soleil", 6f, assetManager));
 		planets.add(new Planet("Mercure", assetManager));
 		planets.add(new Planet("Venus", assetManager));
 		planets.add(new Planet("Terre", assetManager));
@@ -103,7 +103,7 @@ public class SystemeSolaire extends SimpleApplication {
 		//Lunes de Mars Phobos Deimos
 		//Lunes de Jupiter Io Europa
 
-		for(Planet p : planets){
+		for(Corp p : planets){
 			rootNode.attachChild(p.getRoot());
 			p.getPlanet().rotate(-FastMath.HALF_PI, 0, 0);
 		}
@@ -130,15 +130,15 @@ public class SystemeSolaire extends SimpleApplication {
 		antTime = actualTime;
 
 		double time = refTime+cptTime;
-		formatDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-
 		Date date = new Date((long)(time));
 		dateLabel.setText(formatDate.format(date));
 
-		for(Planet p : planets){
-			p.rotate(time);
-			// p.rotateSelf(time);
-			// p.rotateMoon(time);
+		for(Corp p : planets){
+			if (!p.getName().equals("Soleil")){
+				((Planet)p).rotate(time);
+				// p.rotateSelf(time);
+				// p.rotateMoon(time);
+			}
 		}
 	}
 
@@ -166,13 +166,13 @@ public class SystemeSolaire extends SimpleApplication {
 		chaseCam.setInvertVerticalAxis(true);
 		chaseCam.setZoomSensitivity(2f); // Sensibilité zoom
 		chaseCam.setRotationSpeed(3f); // Vitesse de rotation
-
+		
 		changeCam(camPlanet);
 		//chaseCam.setLookAtOffset(new Vector3f(0, 5, 0));
 	}
 
 	private void changeCam(int camPlanet){
-		float size = (float)(planets.get(camPlanet).getDemiGrandAxe()/Planet.DEMI_GRAND_AXE_TERRE);
+		float size = (float)(planets.get(camPlanet).size());
 		chaseCam.setSpatial(planets.get(camPlanet).getPlanet());
 		chaseCam.setDefaultDistance(size*10);
 		chaseCam.setMaxDistance(size*50);
@@ -185,8 +185,8 @@ public class SystemeSolaire extends SimpleApplication {
 		changeCam(camPlanet);
 		planetLabel.setText(planets.get(Math.floorMod(camPlanet,planets.size())).getName());
 
-		chaseCam.setDefaultDistance(250);
-		chaseCam.setMaxDistance(500);
+		chaseCam.setDefaultDistance(700);
+		chaseCam.setMaxDistance(2000);
 		chaseCam.setMinDistance(200);
 	}
 

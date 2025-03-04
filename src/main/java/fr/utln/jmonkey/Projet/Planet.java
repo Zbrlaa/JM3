@@ -13,17 +13,16 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Sphere;
 
-public class Planet {
+public class Planet implements Corp{
 	//Obligatoire
 	private String name;
-	// private List<Float> angles;//Rotation autour du root
 	// private List<Float> anglesSelf;//Rotation sur elle-même
 
 	//Créés ultérieurement
 	private Geometry planet;
 	private Node root;//Noyau pour Translation/Rotation
 	private Node node;//Noyau pour ses lunes
-	private List<Planet> moons;
+	private List<Lune> lunes;
 
 	//Remplis par l'Api
 	private double demiGrandAxe;
@@ -51,7 +50,7 @@ public class Planet {
 				periodeOrbitale = planetData.getDouble("periodeOrbitale");
 				inclination = planetData.getDouble("inclination");
 				masse = planetData.getDouble("masse");
-				rayonMoyen = planetData.getDouble("rayonMoyen");
+				rayonMoyen = 0.5 * planetData.getDouble("rayonMoyen");
 				gravite = planetData.getDouble("gravite");
 				inclinaisonAxiale = planetData.getDouble("inclinaisonAxiale");
 			} else {
@@ -66,23 +65,12 @@ public class Planet {
 
 	//Initialisations
 	private void initPlanet(AssetManager assetManager){
-		Sphere sphere = new Sphere(32, 32, (float)(rayonMoyen/RAYON_MOYEN_TERRE));
+		Sphere sphere = new Sphere(32, 32, (float)(rayonMoyen/(RAYON_MOYEN_TERRE)));
 		planet = new Geometry(name, sphere);
 		
 		//Utilisation de la texture
-		String m;
-		String mt;
-		if(name.equals("Soleil")){
-			m = "Misc/Unshaded";
-			mt = "ColorMap";
-		}
-		else{
-			m = "Light/Lighting";
-			mt = "DiffuseMap";
-		}
-
-		Material mat = new Material(assetManager, "Common/MatDefs/" + m + ".j3md");
-		mat.setTexture(mt, assetManager.loadTexture("Planets/" + name + ".jpg"));
+		Material mat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
+		mat.setTexture("DiffuseMap", assetManager.loadTexture("Planets/" + name + ".jpg"));
 
 		planet.setMaterial(mat);
 		node.attachChild(planet);
@@ -95,18 +83,18 @@ public class Planet {
 		root.attachChild(node);
 	}
 
-	public void addMoon(Planet moon){
-		if (moons == null) {
-			moons = new ArrayList<>();
+	public void addlune(Lune lune){
+		if (lunes == null) {
+			lunes = new ArrayList<>();
 		}
-		this.moons.add(moon);
-		this.node.attachChild(moon.getNode());
+		this.lunes.add(lune);
+		this.node.attachChild(lune.getNode());
 	}
 
 
 	public void rotate(double time){
 		float e = (float)excentricite; // Excentricité de la Terre
-		float a = (float)(10*demiGrandAxe/DEMI_GRAND_AXE_TERRE); // Demi-grand axe
+		float a = (float)(30 * demiGrandAxe/DEMI_GRAND_AXE_TERRE); // Demi-grand axe
 		float T = (float)periodeOrbitale; // Période orbitale
 		T *= 24 * 3600;
 
@@ -126,11 +114,11 @@ public class Planet {
 		// node.rotate(tpf*anglesSelf.get(0), tpf*anglesSelf.get(1), tpf*anglesSelf.get(2));
 	}
 
-	public void rotateMoon(float tpf){
-		if (moons != null){
-			for(Planet m : moons){
-				m.rotate(tpf);
-				m.rotateSelf(tpf);
+	public void rotatelune(float time){
+		if (lunes != null){
+			for(Lune l : lunes){
+				l.rotate(time);
+				// m.rotateSelf(tpf);
 			}
 		}
 	}
@@ -173,16 +161,16 @@ public class Planet {
 	}
 
 
-	public List<Planet> getMoons(){
-		return moons;
-	}
-
-	public void setMoons(List<Planet> moons){
-		this.moons = moons;
+	public List<Lune> getlunes(){
+		return lunes;
 	}
 
 
-	public double getDemiGrandAxe() {
+	public double size(){
+		return rayonMoyen/RAYON_MOYEN_TERRE;
+	}
+
+	public double getDemiGrandAxe(){
 		return demiGrandAxe;
 	}
 
