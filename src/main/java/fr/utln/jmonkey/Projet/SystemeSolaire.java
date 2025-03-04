@@ -1,5 +1,6 @@
 package fr.utln.jmonkey.Projet;
 
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
@@ -47,6 +48,7 @@ public class SystemeSolaire extends SimpleApplication {
 	private ChaseCamera chaseCam;
 
 	private Geometry button;
+	SimpleDateFormat formatDate;
 
 	public static void main(String[] args){
 		SystemeSolaire app = new SystemeSolaire();
@@ -230,11 +232,12 @@ public class SystemeSolaire extends SimpleApplication {
 		antTime = actualTime;
 
 		double time = refTime+cptTime;
+		formatDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
 		Date date = new Date((long)(time));
 		// System.out.println(actualTime-refTime);
 		// System.out.println(date.toString());
-		dateLabel.setText(date.toString());
+		dateLabel.setText(formatDate.format(date));
 
 		for(Planet p : planets){
 			// p.rotate(timeV);
