@@ -1,6 +1,5 @@
 package fr.utln.jmonkey.Projet;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -75,13 +74,15 @@ public class Api {
 		JSONObject usefulData = new JSONObject();
 		
 		usefulData.put("name", json.getString("id"));
-		usefulData.put("semiMajorAxis", json.getDouble("semimajorAxis"));
-		usefulData.put("eccentricity", json.getDouble("eccentricity"));
-		usefulData.put("orbitalPeriod", json.getDouble("sideralOrbit"));
+		usefulData.put("demiGrandAxe", json.getDouble("semimajorAxis"));
+		usefulData.put("excentricite", json.getDouble("eccentricity"));
+		usefulData.put("periodeOrbitale", json.getDouble("sideralOrbit"));
 		usefulData.put("inclination", json.getDouble("inclination"));
-		usefulData.put("mass", json.getJSONObject("mass").getDouble("massValue") *
+		usefulData.put("masse", json.getJSONObject("mass").getDouble("massValue") *
 				Math.pow(10, json.getJSONObject("mass").getInt("massExponent")));
-		usefulData.put("meanRadius", json.getDouble("meanRadius"));
+		usefulData.put("rayonMoyen", json.getDouble("meanRadius"));
+		usefulData.put("gravite", json.getDouble("gravity"));
+		usefulData.put("inclinaisonAxiale", json.getDouble("axialTilt"));
 
 		return usefulData;
 	}

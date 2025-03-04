@@ -1,74 +1,90 @@
 {
   "venus": {
     "inclination": 3.39,
-    "meanRadius": 6051.8,
-    "semiMajorAxis": 108208475,
-    "orbitalPeriod": 224.701,
-    "mass": 4.86747E+24,
+    "gravite": 8.87,
     "name": "venus",
-    "eccentricity": 0.0067
+    "excentricite": 0.0067,
+    "masse": 4.86747E+24,
+    "inclinaisonAxiale": 177.36,
+    "demiGrandAxe": 108208475,
+    "rayonMoyen": 6051.8,
+    "periodeOrbitale": 224.701
   },
   "uranus": {
     "inclination": 0.772,
-    "meanRadius": 25362,
-    "semiMajorAxis": 2.870658186E9,
-    "orbitalPeriod": 30685.4,
-    "mass": 8.68127E25,
+    "gravite": 8.87,
     "name": "uranus",
-    "eccentricity": 0.0457
+    "excentricite": 0.0457,
+    "masse": 8.68127E+25,
+    "inclinaisonAxiale": 97.77,
+    "demiGrandAxe": 2870658186,
+    "rayonMoyen": 25362,
+    "periodeOrbitale": 30685.4
   },
   "terre": {
     "inclination": 0,
-    "meanRadius": 6371.0084,
-    "semiMajorAxis": 149598023,
-    "orbitalPeriod": 365.256,
-    "mass": 5.97237E+24,
+    "gravite": 9.8,
     "name": "terre",
-    "eccentricity": 0.0167
+    "excentricite": 0.0167,
+    "masse": 5.97237E+24,
+    "inclinaisonAxiale": 23.4393,
+    "demiGrandAxe": 149598023,
+    "rayonMoyen": 6371.0084,
+    "periodeOrbitale": 365.256
   },
   "mars": {
     "inclination": 1.85,
-    "meanRadius": 3389.5,
-    "semiMajorAxis": 2.279392E+8,
-    "orbitalPeriod": 686.98,
-    "mass": 6.417119999999999E+23,
+    "gravite": 3.71,
     "name": "mars",
-    "eccentricity": 0.0935
+    "excentricite": 0.0935,
+    "masse": 6.417119999999999E+23,
+    "inclinaisonAxiale": 25.19,
+    "demiGrandAxe": 2.279392E+8,
+    "rayonMoyen": 3389.5,
+    "periodeOrbitale": 686.98
   },
   "saturne": {
     "inclination": 2.485,
-    "meanRadius": 58232,
-    "semiMajorAxis": 1426666422,
-    "orbitalPeriod": 10759.22,
-    "mass": 5.6833600000000006E+26,
+    "gravite": 10.44,
     "name": "saturne",
-    "eccentricity": 0.0565
+    "excentricite": 0.0565,
+    "masse": 5.6833600000000006E+26,
+    "inclinaisonAxiale": 26.73,
+    "demiGrandAxe": 1426666422,
+    "rayonMoyen": 58232,
+    "periodeOrbitale": 10759.22
   },
   "neptune": {
     "inclination": 1.769,
-    "meanRadius": 24622,
-    "semiMajorAxis": 4498396441,
-    "orbitalPeriod": 60189,
-    "mass": 1.02413E+26,
+    "gravite": 11.15,
     "name": "neptune",
-    "eccentricity": 0.0113
+    "excentricite": 0.0113,
+    "masse": 1.02413E26,
+    "inclinaisonAxiale": 28.3,
+    "demiGrandAxe": 4.498396441E9,
+    "rayonMoyen": 24622,
+    "periodeOrbitale": 60189
   },
   "mercure": {
     "inclination": 7,
-    "meanRadius": 2439.4,
-    "semiMajorAxis": 5.790905E+7,
-    "orbitalPeriod": 87.969,
-    "mass": 3.30114E+23,
+    "gravite": 3.7,
     "name": "mercure",
-    "eccentricity": 0.2056
+    "excentricite": 0.2056,
+    "masse": 3.30114E+23,
+    "inclinaisonAxiale": 0.0352,
+    "demiGrandAxe": 5.790905E+7,
+    "rayonMoyen": 2439.4,
+    "periodeOrbitale": 87.969
   },
   "jupiter": {
     "inclination": 1.304,
-    "meanRadius": 69911,
-    "semiMajorAxis": 778340821,
-    "orbitalPeriod": 4332.589,
-    "mass": 1.89819E+27,
+    "gravite": 24.79,
     "name": "jupiter",
-    "eccentricity": 0.0489
+    "excentricite": 0.0489,
+    "masse": 1.89819E+27,
+    "inclinaisonAxiale": 3.12,
+    "demiGrandAxe": 778340821,
+    "rayonMoyen": 69911,
+    "periodeOrbitale": 4332.589
   }
 }

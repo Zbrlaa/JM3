@@ -2,10 +2,7 @@ package fr.utln.jmonkey.Projet;
 
 import org.json.JSONObject;
 
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -19,11 +16,8 @@ import com.jme3.scene.shape.Sphere;
 public class Planet {
 	//Obligatoire
 	private String name;
-	//private ColorRGBA color;
-	private float size;
-	private float distance;
-	private List<Float> angles;//Rotation autour du root
-	private List<Float> anglesSelf;//Rotation sur elle-même
+	// private List<Float> angles;//Rotation autour du root
+	// private List<Float> anglesSelf;//Rotation sur elle-même
 
 	//Créés ultérieurement
 	private Geometry planet;
@@ -32,21 +26,34 @@ public class Planet {
 	private List<Planet> moons;
 
 	//Remplis par l'Api
-	private double sizeR;
+	private double demiGrandAxe;
+	private double excentricite;
+	private double periodeOrbitale;
+	private double inclination;
+	private double masse;
+	private double rayonMoyen;
+	private double gravite;
+	private double inclinaisonAxiale;
+
+	public static double RAYON_MOYEN_TERRE = 6371.0084;
+	public static double DEMI_GRAND_AXE_TERRE = 149598023;
 	
 	//Constructeur
-	public Planet(String name, float size, float distance, List<Float> angles, List<Float> anglesSelf,AssetManager assetManager){
+	public Planet(String name, AssetManager assetManager){
 		this.name = name;
-		this.size = size;
-		this.distance = distance;
-		this.angles = angles;
-		this.anglesSelf = anglesSelf;
 
 		if (Set.of("terre","mercure","venus","mars","jupiter","saturne","neptune","uranus").contains(name.toLowerCase())){
 			Api api = new Api();
 			JSONObject planetData = api.getPlanetData(name.toLowerCase());
 			if (planetData != null) {
-				System.out.println("Données récupérées : " + planetData.toString(2));
+				demiGrandAxe = planetData.getDouble("demiGrandAxe");
+				excentricite = planetData.getDouble("excentricite");
+				periodeOrbitale = planetData.getDouble("periodeOrbitale");
+				inclination = planetData.getDouble("inclination");
+				masse = planetData.getDouble("masse");
+				rayonMoyen = planetData.getDouble("rayonMoyen");
+				gravite = planetData.getDouble("gravite");
+				inclinaisonAxiale = planetData.getDouble("inclinaisonAxiale");
 			} else {
 				System.out.println("Erreur lors de la récupération des données.");
 			}
@@ -59,7 +66,7 @@ public class Planet {
 
 	//Initialisations
 	private void initPlanet(AssetManager assetManager){
-		Sphere sphere = new Sphere(32, 32, size);
+		Sphere sphere = new Sphere(32, 32, (float)(rayonMoyen/RAYON_MOYEN_TERRE));
 		planet = new Geometry(name, sphere);
 		
 		//Utilisation de la texture
@@ -86,7 +93,6 @@ public class Planet {
 		root = new Node(name + "Root");
 
 		root.attachChild(node);
-		// node.setLocalTranslation(distance, 0, 0);
 	}
 
 	public void addMoon(Planet moon){
@@ -98,35 +104,26 @@ public class Planet {
 	}
 
 
-	public void rotate(float tpf){
-		float e = 0.0167f; // Excentricité de la Terre
-		float a = 1f;      // Demi-grand axe
-		float T = 0.01f; // Période orbitale
+	public void rotate(double time){
+		float e = (float)excentricite; // Excentricité de la Terre
+		float a = (float)(10*demiGrandAxe/DEMI_GRAND_AXE_TERRE); // Demi-grand axe
+		float T = (float)periodeOrbitale; // Période orbitale
 		T *= 24 * 3600;
-		
-		double secondesDepuisRef = (System.currentTimeMillis() / 1000.0);
-		long millis = (long) (secondesDepuisRef * 1000);
-		Date date = new Date(millis);
-		// System.out.println(date.toString());
 
-        //Anomalie moyenne (M)
-        float M = (float) (2 * Math.PI * (secondesDepuisRef% T) / T);
-        //Anomalie vraie θ
-        float theta = M + 2 * e * (float) Math.sin(M) + 1.25f * e * e * (float) Math.sin(2 * M);
+		//Anomalie moyenne (M)
+		float M = (float) (2 * Math.PI * (time% T) / T);
+		//Anomalie vraie θ
+		float theta = M + 2 * e * (float) Math.sin(M) + 1.25f * e * e * (float) Math.sin(2 * M);
 
-        float x = a * (float) Math.cos(theta);
-        float z = a * (float) Math.sqrt(1 - e * e) * (float) Math.sin(theta);
+		float x = a * (float) Math.cos(theta);
+		float z = a * (float) Math.sqrt(1 - e * e) * (float) Math.sin(theta);
 
-		//root.rotate(tpf*angles.get(0), tpf*angles.get(1), tpf*angles.get(2));
-		// Vector3f pos = node.getLocalTranslation();
-
-		Vector3f newPos = new Vector3f(distance*x, 0f, distance*z);
-		// System.out.println(newPos);
+		Vector3f newPos = new Vector3f(x, 0f, z);
 		node.setLocalTranslation(newPos);
 	}
 
 	public void rotateSelf(float tpf){
-		node.rotate(tpf*anglesSelf.get(0), tpf*anglesSelf.get(1), tpf*anglesSelf.get(2));
+		// node.rotate(tpf*anglesSelf.get(0), tpf*anglesSelf.get(1), tpf*anglesSelf.get(2));
 	}
 
 	public void rotateMoon(float tpf){
@@ -146,50 +143,6 @@ public class Planet {
 
 	public void setName(String name){
 		this.name = name;
-	}
-
-
-	public float getSize(){
-		return size;
-	}
-
-	public void setSize(float size){
-		this.size = size;
-	}
-
-
-	public float getDistance(){
-		return distance;
-	}
-
-	public void setDistance(float distance){
-		this.distance = distance;
-	}
-
-
-	public List<Float> getAngles(){
-		return angles;
-	}
-
-	public void setAngles(List<Float> angles){
-		this.angles = angles;
-	}
-
-	public void setAngles(float x, float y, float z){
-		setAngles(new ArrayList<>(List.of(x, y, z)));   
-	}
-
-
-	public List<Float> getAnglesSelf(){
-		return anglesSelf;
-	}
-
-	public void setAnglesSelf(List<Float> anglesSelf){
-		this.angles = anglesSelf;
-	}
-
-	public void setAnglesSelf(float x, float y, float z){
-		setAnglesSelf(new ArrayList<>(List.of(x, y, z)));   
 	}
 
 
@@ -226,5 +179,45 @@ public class Planet {
 
 	public void setMoons(List<Planet> moons){
 		this.moons = moons;
+	}
+
+
+	public double getDemiGrandAxe() {
+		return demiGrandAxe;
+	}
+
+
+	public double getExcentricite() {
+		return excentricite;
+	}
+
+
+	public double getPeriodeOrbitale() {
+		return periodeOrbitale;
+	}
+
+
+	public double getInclination() {
+		return inclination;
+	}
+
+
+	public double getMasse() {
+		return masse;
+	}
+
+
+	public double getRayonMoyen() {
+		return rayonMoyen;
+	}
+
+
+	public double getGravite() {
+		return gravite;
+	}
+
+
+	public double getInclinaisonAxiale() {
+		return inclinaisonAxiale;
 	}
 }
