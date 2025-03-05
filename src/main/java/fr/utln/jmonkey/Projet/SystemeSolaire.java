@@ -99,12 +99,12 @@ public class SystemeSolaire extends SimpleApplication {
 		((Planet)planets.get(3)).addlune(new Lune("Lune", 27.3217, 5.15f, 0.16f, 1.5d, assetManager));
 
 		//Lunes de Mars Phobos Deimos
-		((Planet)planets.get(4)).addlune(new Lune("Phobos", 0.3189, 5.15f, 0.06f, 0.65d, assetManager));
-		((Planet)planets.get(4)).addlune(new Lune("Deimos", 1.2624, 5.15f, 0.04f, 0.8d, assetManager));
+		((Planet)planets.get(4)).addlune(new Lune("Phobos", 0.3189, 1.08f, 0.06f, 0.65d, assetManager));
+		((Planet)planets.get(4)).addlune(new Lune("Deimos", 1.2624, 1.79f, 0.04f, 0.8d, assetManager));
 
 		//Lunes de Jupiter Io Europa
-		((Planet)planets.get(5)).addlune(new Lune("Io", 1.7691, 5.15f, 0.3f, 10.5d, assetManager));
-		((Planet)planets.get(5)).addlune(new Lune("Europa", 3.5512, 5.15f, 0.25f, 12d, assetManager));
+		((Planet)planets.get(5)).addlune(new Lune("Io", 1.7691, 2.21f, 0.3f, 10.5d, assetManager));
+		((Planet)planets.get(5)).addlune(new Lune("Europa", 3.5512, 1.79f, 0.25f, 12d, assetManager));
 		
 		for(Corp p : planets){
 			rootNode.attachChild(p.getRoot());
@@ -129,7 +129,8 @@ public class SystemeSolaire extends SimpleApplication {
 	@Override
 	public void simpleUpdate(float tpf){
 		double actualTime = System.currentTimeMillis();
-		cptTime += (actualTime-antTime)*timeV;
+		double passedTime = (actualTime-antTime)*timeV;
+		cptTime += passedTime;
 		antTime = actualTime;
 
 		double time = refTime+cptTime;
@@ -139,8 +140,8 @@ public class SystemeSolaire extends SimpleApplication {
 		for(Corp p : planets){
 			if (!p.getName().equals("Soleil")){
 				((Planet)p).rotate(time);
-				// p.rotateSelf(time);
-				// p.rotateMoon(time);
+				((Planet)p).rotateLune(passedTime);
+				((Planet)p).rotateSelf(passedTime);
 			}
 		}
 	}
@@ -167,7 +168,7 @@ public class SystemeSolaire extends SimpleApplication {
 		chaseCam = new ChaseCamera(cam, planets.get(camPlanet).getPlanet(), inputManager);
 		chaseCam.setHideCursorOnRotate(false);
 		chaseCam.setInvertVerticalAxis(true);
-		chaseCam.setZoomSensitivity(2f); // Sensibilité zoom
+		chaseCam.setZoomSensitivity(3f); // Sensibilité zoom
 		chaseCam.setRotationSpeed(3f); // Vitesse de rotation
 		
 		changeCam(camPlanet);

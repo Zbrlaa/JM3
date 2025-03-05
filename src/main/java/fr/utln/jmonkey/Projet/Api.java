@@ -7,21 +7,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 public class Api {
-
 	private static final String CACHE_FILE = "planetes.json";
-
-	public static void main(String[] args) {
-		// Api api = new Api();
-		// String[] planetes = {"terre","mercure","venus","mars","jupiter","saturne","neptune","uranus"};
-		// for(String planete : planetes){
-		// 	JSONObject planetData = api.getPlanetData(planete);
-		// 	if (planetData != null) {
-		// 		System.out.println("Données récupérées : " + planetData.toString(2));
-		// 	} else {
-		// 		System.out.println("Erreur lors de la récupération des données.");
-		// 	}
-		// }
-	}
 
 	public JSONObject getPlanetData(String planetName) {
 		JSONObject allPlanets = loadCache();
@@ -83,6 +69,9 @@ public class Api {
 		usefulData.put("rayonMoyen", json.getDouble("meanRadius"));
 		usefulData.put("gravite", json.getDouble("gravity"));
 		usefulData.put("inclinaisonAxiale", json.getDouble("axialTilt"));
+		usefulData.put("densite", json.getDouble("density"));
+		usefulData.put("temperatureK", json.getDouble("avgTemp"));
+		usefulData.put("rotation", json.getDouble("sideralRotation"));
 
 		return usefulData;
 	}

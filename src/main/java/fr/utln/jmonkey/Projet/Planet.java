@@ -8,6 +8,7 @@ import java.util.Set;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
+import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -33,6 +34,9 @@ public class Planet implements Corp{
 	private double rayonMoyen;
 	private double gravite;
 	private double inclinaisonAxiale;
+	private double densite;
+	private double temperatureK;
+	private double rotation;
 
 	public static double RAYON_MOYEN_TERRE = 6371.0084;
 	public static double DEMI_GRAND_AXE_TERRE = 149598023;
@@ -53,6 +57,10 @@ public class Planet implements Corp{
 				rayonMoyen = 0.5 * planetData.getDouble("rayonMoyen");
 				gravite = planetData.getDouble("gravite");
 				inclinaisonAxiale = planetData.getDouble("inclinaisonAxiale");
+				densite = planetData.getDouble("densite");
+				temperatureK = planetData.getDouble("temperatureK");
+				rotation = planetData.getDouble("rotation");
+			
 			} else {
 				System.out.println("Erreur lors de la récupération des données.");
 			}
@@ -88,7 +96,7 @@ public class Planet implements Corp{
 			lunes = new ArrayList<>();
 		}
 		this.lunes.add(lune);
-		this.node.attachChild(lune.getNode());
+		this.node.attachChild(lune.getRoot());
 	}
 
 
@@ -110,11 +118,13 @@ public class Planet implements Corp{
 		node.setLocalTranslation(newPos);
 	}
 
-	public void rotateSelf(float tpf){
-		// node.rotate(tpf*anglesSelf.get(0), tpf*anglesSelf.get(1), tpf*anglesSelf.get(2));
+	public void rotateSelf(double time){
+		float angle = FastMath.DEG_TO_RAD * (float)time * 360f / ((float)rotation*3600f);
+		planet.rotate(0f, 0f, angle);
+		System.out.println("Rotate " + name + " " + angle);
 	}
 
-	public void rotatelune(float time){
+	public void rotateLune(double time){
 		if (lunes != null){
 			for(Lune l : lunes){
 				l.rotate(time);

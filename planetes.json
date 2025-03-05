@@ -2,10 +2,13 @@
   "venus": {
     "inclination": 3.39,
     "gravite": 8.87,
+    "rotation": -5832.5,
     "name": "venus",
+    "densite": 5.243,
     "excentricite": 0.0067,
     "masse": 4.86747E+24,
     "inclinaisonAxiale": 177.36,
+    "temperatureK": 737,
     "demiGrandAxe": 108208475,
     "rayonMoyen": 6051.8,
     "periodeOrbitale": 224.701
@@ -13,10 +16,13 @@
   "uranus": {
     "inclination": 0.772,
     "gravite": 8.87,
+    "rotation": -17.24,
     "name": "uranus",
+    "densite": 1.27,
     "excentricite": 0.0457,
     "masse": 8.68127E+25,
     "inclinaisonAxiale": 97.77,
+    "temperatureK": 76,
     "demiGrandAxe": 2870658186,
     "rayonMoyen": 25362,
     "periodeOrbitale": 30685.4
@@ -24,10 +30,13 @@
   "terre": {
     "inclination": 0,
     "gravite": 9.8,
+    "rotation": 23.9345,
     "name": "terre",
+    "densite": 5.5136,
     "excentricite": 0.0167,
     "masse": 5.97237E+24,
     "inclinaisonAxiale": 23.4393,
+    "temperatureK": 288,
     "demiGrandAxe": 149598023,
     "rayonMoyen": 6371.0084,
     "periodeOrbitale": 365.256
@@ -35,10 +44,13 @@
   "mars": {
     "inclination": 1.85,
     "gravite": 3.71,
+    "rotation": 24.6229,
     "name": "mars",
+    "densite": 3.9341,
     "excentricite": 0.0935,
     "masse": 6.417119999999999E+23,
     "inclinaisonAxiale": 25.19,
+    "temperatureK": 210,
     "demiGrandAxe": 2.279392E+8,
     "rayonMoyen": 3389.5,
     "periodeOrbitale": 686.98
@@ -46,10 +58,13 @@
   "saturne": {
     "inclination": 2.485,
     "gravite": 10.44,
+    "rotation": 10.656,
     "name": "saturne",
+    "densite": 0.6871,
     "excentricite": 0.0565,
     "masse": 5.6833600000000006E+26,
     "inclinaisonAxiale": 26.73,
+    "temperatureK": 134,
     "demiGrandAxe": 1426666422,
     "rayonMoyen": 58232,
     "periodeOrbitale": 10759.22
@@ -57,10 +72,13 @@
   "neptune": {
     "inclination": 1.769,
     "gravite": 11.15,
+    "rotation": 16.11,
     "name": "neptune",
+    "densite": 1.638,
     "excentricite": 0.0113,
     "masse": 1.02413E26,
     "inclinaisonAxiale": 28.3,
+    "temperatureK": 55,
     "demiGrandAxe": 4.498396441E9,
     "rayonMoyen": 24622,
     "periodeOrbitale": 60189
@@ -68,10 +86,13 @@
   "mercure": {
     "inclination": 7,
     "gravite": 3.7,
+    "rotation": 1407.6,
     "name": "mercure",
+    "densite": 5.4291,
     "excentricite": 0.2056,
     "masse": 3.30114E+23,
     "inclinaisonAxiale": 0.0352,
+    "temperatureK": 440,
     "demiGrandAxe": 5.790905E+7,
     "rayonMoyen": 2439.4,
     "periodeOrbitale": 87.969
@@ -79,10 +100,13 @@
   "jupiter": {
     "inclination": 1.304,
     "gravite": 24.79,
+    "rotation": 9.925,
     "name": "jupiter",
+    "densite": 1.3262,
     "excentricite": 0.0489,
     "masse": 1.89819E+27,
     "inclinaisonAxiale": 3.12,
+    "temperatureK": 165,
     "demiGrandAxe": 778340821,
     "rayonMoyen": 69911,
     "periodeOrbitale": 4332.589

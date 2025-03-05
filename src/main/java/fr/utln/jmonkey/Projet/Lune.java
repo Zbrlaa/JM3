@@ -2,6 +2,9 @@ package fr.utln.jmonkey.Projet;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
+import com.jme3.math.FastMath;
+import com.jme3.math.Quaternion;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Sphere;
@@ -46,11 +49,17 @@ public class Lune {
 
 		root.attachChild(node);
 		node.setLocalTranslation((float)distance, 0, 0);
-		root.rotate(0f, (float)Math.PI, (float)Math.PI);
+
+		float inclinationRadians = FastMath.DEG_TO_RAD * inclinaisonOrbitale;
+		System.out.println(name + " " + inclinaisonOrbitale + " " + inclinationRadians);
+		node.rotate(-FastMath.HALF_PI, 0, 0);
+		root.rotate(inclinationRadians, 0f, 0f);
 	}
 
 	public void rotate(double time){
-
+		float angle = FastMath.DEG_TO_RAD * (float)time * 360f / ((float)revolution*24f*3600f);
+		root.rotate(0f, angle, 0f);
+		System.out.println("Rotate " + name + " " + angle);
 	}
 
 	public String getName(){
@@ -59,5 +68,9 @@ public class Lune {
 
 	public Node getNode(){
 		return node;
+	}
+
+	public Node getRoot(){
+		return root;
 	}
 }
