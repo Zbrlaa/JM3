@@ -9,22 +9,22 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Sphere;
 
-public class Lune {
+public class Lune implements Corp{
 	private String name;
 	private double revolution;
 	private float inclinaisonOrbitale;
-	private float rayon;
+	private float rayonMoyen;
 	private double distance;
 
 	private Geometry planet;
 	private Node root;
 	private Node node;
 
-	public Lune(String name, double revolution, float inclinaisonOrbitale, float rayon, double distance, AssetManager assetManager){
+	public Lune(String name, double revolution, float inclinaisonOrbitale, float rayonMoyen, double distance, AssetManager assetManager){
 		this.name = name;
 		this.revolution = revolution;;
 		this.inclinaisonOrbitale = inclinaisonOrbitale;
-		this.rayon = rayon;
+		this.rayonMoyen = rayonMoyen;
 		this.distance = distance;
 		
 		initNodes();
@@ -32,7 +32,7 @@ public class Lune {
 	}
 
 	private void initPlanet(AssetManager assetManager){
-		Sphere sphere = new Sphere(32, 32, rayon);
+		Sphere sphere = new Sphere(32, 32, rayonMoyen);
 		planet = new Geometry(name, sphere);
 		
 		//Utilisation de la texture
@@ -51,7 +51,7 @@ public class Lune {
 		node.setLocalTranslation((float)distance, 0, 0);
 
 		float inclinationRadians = FastMath.DEG_TO_RAD * inclinaisonOrbitale;
-		System.out.println(name + " " + inclinaisonOrbitale + " " + inclinationRadians);
+		// System.out.println(name + " " + inclinaisonOrbitale + " " + inclinationRadians);
 		node.rotate(-FastMath.HALF_PI, 0, 0);
 		root.rotate(inclinationRadians, 0f, 0f);
 	}
@@ -59,7 +59,7 @@ public class Lune {
 	public void rotate(double time){
 		float angle = FastMath.DEG_TO_RAD * (float)time * 360f / ((float)revolution*24f*3600f);
 		root.rotate(0f, angle, 0f);
-		System.out.println("Rotate " + name + " " + angle);
+		// System.out.println("Rotate " + name + " " + angle);
 	}
 
 	public String getName(){
@@ -72,5 +72,19 @@ public class Lune {
 
 	public Node getRoot(){
 		return root;
+	}
+
+	@Override
+	public Geometry getPlanet() {
+		return planet;
+	}
+
+	@Override
+	public double size() {
+		return rayonMoyen/Planet.RAYON_MOYEN_TERRE;
+	}
+
+	public double getRayonMoyen(){
+		return rayonMoyen;
 	}
 }

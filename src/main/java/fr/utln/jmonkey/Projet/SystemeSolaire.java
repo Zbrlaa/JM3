@@ -35,7 +35,7 @@ import de.lessvoid.nifty.layout.manager.HorizontalLayout;
 public class SystemeSolaire extends SimpleApplication {
 	private List<Corp> planets;
 	
-	private int timeV;
+	private double timeV;
 	private double refTime;
 	private double antTime;
 	private double cptTime;
@@ -96,19 +96,33 @@ public class SystemeSolaire extends SimpleApplication {
 			planets.add(new Planet(s, assetManager));
 		}
 	
-		((Planet)planets.get(3)).addlune(new Lune("Lune", 27.3217, 5.15f, 0.16f, 1.5d, assetManager));
+		Lune lune = new Lune("Lune", 27.3217, 5.15f, 0.16f, 1.5d, assetManager);
+		// planets.add(lune);
+		((Planet)planets.get(3)).addlune(lune);
 
 		//Lunes de Mars Phobos Deimos
-		((Planet)planets.get(4)).addlune(new Lune("Phobos", 0.3189, 1.08f, 0.06f, 0.65d, assetManager));
-		((Planet)planets.get(4)).addlune(new Lune("Deimos", 1.2624, 1.79f, 0.04f, 0.8d, assetManager));
+		Lune phobos = new Lune("Phobos", 0.3189, 1.08f, 0.06f, 0.65d, assetManager);
+		Lune deimos = new Lune("Deimos", 1.2624, 1.79f, 0.04f, 0.8d, assetManager);
+		// planets.add(phobos);
+		// planets.add(deimos);
+		((Planet)planets.get(4)).addlune(phobos);
+		((Planet)planets.get(4)).addlune(deimos);
 
 		//Lunes de Jupiter Io Europa
-		((Planet)planets.get(5)).addlune(new Lune("Io", 1.7691, 2.21f, 0.3f, 10.5d, assetManager));
-		((Planet)planets.get(5)).addlune(new Lune("Europa", 3.5512, 1.79f, 0.25f, 12d, assetManager));
+		Lune io = new Lune("Io", 1.7691, 2.21f, 0.3f, 10.5d, assetManager);
+		Lune europa = new Lune("Europa", 3.5512, 1.79f, 0.25f, 12d, assetManager);
+		// planets.add(io);
+		// planets.add(europa);
+		((Planet)planets.get(5)).addlune(io);
+		((Planet)planets.get(5)).addlune(europa);
 		
 		for(Corp p : planets){
-			rootNode.attachChild(p.getRoot());
-			p.getPlanet().rotate(-FastMath.HALF_PI, 0, 0);
+			if(p.getClass().equals(Planet.class)){
+				System.out.println("init");
+				rootNode.attachChild(p.getRoot());
+				p.getPlanet().rotate(-FastMath.HALF_PI, 0, 0);
+			}
+			
 		}
 
 		gestionCam();
@@ -138,7 +152,8 @@ public class SystemeSolaire extends SimpleApplication {
 		dateLabel.setText(formatDate.format(date));
 
 		for(Corp p : planets){
-			if (!p.getName().equals("Soleil")){
+			if(p.getClass() == Planet.class){
+				System.out.println(p.getName());
 				((Planet)p).rotate(time);
 				((Planet)p).rotateLune(passedTime);
 				((Planet)p).rotateSelf(passedTime);
@@ -199,20 +214,14 @@ public class SystemeSolaire extends SimpleApplication {
 		antTime = System.currentTimeMillis();
 		cptTime = 0;
 		timeV = 1;
-		timeLabel.setText("x"+(int)timeV);
-
-		// for(Planet p : planets){
-		// 	p.rotate(time);
-		// 	p.rotateSelf(time);
-		// 	p.rotateMoon(time);
-		// }
+		timeLabel.setText("x"+String.format("%.2f", timeV));
 	}
 
 	
 	private void addBoutonTemps(){
 		Container container = new Container();
 
-		timeLabel = new Label("x"+(int)timeV);
+		timeLabel = new Label("x"+String.format("%.2f", timeV));
 		timeLabel.setFontSize(20);
 		timeLabel.setColor(ColorRGBA.White);
 
@@ -220,16 +229,8 @@ public class SystemeSolaire extends SimpleApplication {
 		btnAccelerer.addClickCommands(new Command<Button>() {
 			@Override
 			public void execute(Button source) {
-				if(timeV == -1){
-					timeV = 1;
-				}
-				else if(timeV < -1){
-					timeV /= 10;
-				}
-				else{
-					timeV *= 10;
-				}
-				timeLabel.setText("x"+(int)timeV);
+				timeV *= 10f;
+				timeLabel.setText("x"+String.format("%.2f", timeV));
 			}
 		});
 
@@ -237,16 +238,8 @@ public class SystemeSolaire extends SimpleApplication {
 		btnRalentir.addClickCommands(new Command<Button>() {
 			@Override
 			public void execute(Button source) {
-				if(timeV == 1){
-					timeV = -1;
-				}
-				else if(timeV > 1){
-					timeV /= 10;
-				}
-				else{
-					timeV *= 10;
-				}
-				timeLabel.setText("x"+(int)timeV);
+				timeV /= 10f;
+				timeLabel.setText("x"+String.format("%.2f", timeV));
 			}
 		});
 
@@ -259,7 +252,7 @@ public class SystemeSolaire extends SimpleApplication {
 		container.setLayout(new SpringGridLayout(Axis.X, Axis.Y));
 		btnRalentir.setLocalTranslation(0, 0, 0);
 		timeLabel.setLocalTranslation(30, 0, 0);
-		btnAccelerer.setLocalTranslation(80, 0, 0);
+		btnAccelerer.setLocalTranslation(120, 0, 0);
 	}
 
 

@@ -121,7 +121,7 @@ public class Planet implements Corp{
 	public void rotateSelf(double time){
 		float angle = FastMath.DEG_TO_RAD * (float)time * 360f / ((float)rotation*3600f);
 		planet.rotate(0f, 0f, angle);
-		System.out.println("Rotate " + name + " " + angle);
+		// System.out.println("Rotate " + name + " " + angle);
 	}
 
 	public void rotateLune(double time){

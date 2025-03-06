@@ -12,10 +12,12 @@ public class Etoile implements Corp{
 	private Node root;//Noyau pour Translation/Rotation
 	private Node node;//Noyau pour ses lunes
 	private float radius;
+	private double rayonMoyen;
 
 	public Etoile(String name, float radius, AssetManager assetManager){
 		this.name = name;
 		this.radius = radius;
+		this.rayonMoyen = 696340;
 	
 		initNodes();
 		initPlanet(assetManager);
@@ -59,5 +61,9 @@ public class Etoile implements Corp{
 
 	public double size(){
 		return (double)radius;
+	}
+	
+	public double getRayonMoyen() {
+		return rayonMoyen;
 	}
 }
