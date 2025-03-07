@@ -102,21 +102,21 @@ public class SystemeSolaire extends SimpleApplication {
 		
 			((Planet)planets.get(6)).addRings(assetManager, "Anneaux_Sat");
 
-			Lune lune = new Lune("Lune", 27.3217, 5.15f, 0.16f, 1.5d, 1737d, 7.342 * Math.pow(10, 22), 250, 1.62, assetManager);
+			Lune lune = new Lune("Lune", 27.3217, 5.15f, 0.16f, 1.5d, 1737d, 7.342 * Math.pow(10, 22), 250, 1.62, 384400, 0.055,27.32, assetManager);
 			planets.add(lune);
 			((Planet)planets.get(3)).addlune(lune);
 	
 			//Lunes de Mars Phobos Deimos
-			Lune phobos = new Lune("Phobos", 0.3189, 1.08f, 0.06f, 0.65d,11.3, 1.07 * Math.pow(10, 16), 233, 0.0057, assetManager);
-			Lune deimos = new Lune("Deimos", 1.2624, 1.79f, 0.04f, 0.1d, 6.2, 1.48 * Math.pow(10, 15), 233, 0.003, assetManager);
+			Lune phobos = new Lune("Phobos", 0.3189, 1.08f, 0.06f, 0.65d,11.3, 1.07 * Math.pow(10, 16), 233, 0.0057, 9377, 0.015, 0.32, assetManager);
+			Lune deimos = new Lune("Deimos", 1.2624, 1.79f, 0.04f, 0.4d, 6.2, 1.48 * Math.pow(10, 15), 233, 0.003, 23460, 0.0002, 1.26, assetManager);
 			planets.add(phobos);
 			planets.add(deimos);
 			((Planet)planets.get(4)).addlune(phobos);
 			((Planet)planets.get(4)).addlune(deimos);
 	
 			//Lunes de Jupiter Io Europa
-			Lune io = new Lune("Io", 1.7691, 2.21f, 0.3f, 10.5d,1821, 8.93 * Math.pow(10, 22), 130, 1.79, assetManager);
-			Lune europa = new Lune("Europa", 3.5512, 1.79f, 0.25f, 12d,1561, 4.8 * Math.pow(10, 22),102, 1.31, assetManager);
+			Lune io = new Lune("Io", 1.7691, 2.21f, 0.3f, 10.5d,1821, 8.93 * Math.pow(10, 22), 130, 1.79, 421700, 0.004, 1.77, assetManager);
+			Lune europa = new Lune("Europa", 3.5512, 1.79f, 0.25f, 14d,1561, 4.8 * Math.pow(10, 22),102, 1.31, 671100,0.009, 3.55, assetManager);
 			planets.add(io);
 			planets.add(europa);
 			((Planet)planets.get(5)).addlune(io);
@@ -141,13 +141,13 @@ public class SystemeSolaire extends SimpleApplication {
 	
 			gestionCam();
 		
-			// // Création du PostProcessor
-			// FilterPostProcessor fpp = new FilterPostProcessor(assetManager);
-			// viewPort.addProcessor(fpp);
+			// Création du PostProcessor
+			FilterPostProcessor fpp = new FilterPostProcessor(assetManager);
+			viewPort.addProcessor(fpp);
 	
-			// // Ajout d'un effet de Glow (brillance)
-			// BloomFilter bloom = new BloomFilter(BloomFilter.GlowMode.Scene);
-			// fpp.addFilter(bloom);
+			// Ajout d'un effet de Glow (brillance)
+			BloomFilter bloom = new BloomFilter(BloomFilter.GlowMode.Scene);
+			fpp.addFilter(bloom);
 	
 			addBoutonTemps();
 			addBoutonPlanetes();

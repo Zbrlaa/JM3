@@ -9,7 +9,6 @@ import java.util.Set;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState;
-import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
@@ -77,13 +76,15 @@ public class Planet implements Corp{
 
 		initNodes();
 		initPlanet(assetManager);
-		initOrbite(assetManager, ColorRGBA.Blue);
+		initOrbite(assetManager);
 	}
 
 
 	//Initialisations
 	private void initPlanet(AssetManager assetManager){
-		Sphere sphere = new Sphere(32, 32, (float)(rayonMoyen/(RAYON_MOYEN_TERRE)));
+		float r = (float)(rayonMoyen/(RAYON_MOYEN_TERRE));
+		System.out.println(name + " " + r);
+		Sphere sphere = new Sphere(32, 32, r);
 		sphere.setTextureMode(Sphere.TextureMode.Projected);
 		planet = new Geometry(name, sphere);
 		
@@ -126,7 +127,7 @@ public class Planet implements Corp{
 
 		float x = a * (float) Math.cos(-theta) - e*a;
 		float z = a * (float) Math.sqrt(1 - e * e) * (float) Math.sin(-theta);
-		System.out.println(name+" "+x+" "+z);
+		// System.out.println(name+" "+x+" "+z);
 		Vector3f newPos = new Vector3f(x, 0f, z);
 		node.setLocalTranslation(newPos);
 	}
@@ -146,10 +147,11 @@ public class Planet implements Corp{
 		}
 	}
 
-	public void initOrbite(AssetManager assetManager, ColorRGBA color){
+	public void initOrbite(AssetManager assetManager){
 		// Nombre d'échantillons (points)
 		int samples = 256;
 		float a = (float)(30 * demiGrandAxe/DEMI_GRAND_AXE_TERRE);
+		System.out.println(name + " orbite " + demiGrandAxe + " " + a);
 
 		// Calcul du demi-petit axe à partir du demi-grand axe et de l'excentricité
 		float demiPetitAxe = a * (float) Math.sqrt(1 - Math.pow(excentricite, 2d));
