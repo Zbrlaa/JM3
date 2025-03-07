@@ -11,6 +11,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Mesh;
 import com.jme3.util.BufferUtils;
 import com.jme3.scene.VertexBuffer;
+import java.util.Random;
 
 //Gestion des lunes de la meme facon que les planetes mais les informations sont rentrées à la main et pas avec l'api
 public class Lune implements Corp{
@@ -70,6 +71,8 @@ public class Lune implements Corp{
 	}
 
 	private void initNodes(){
+		Random random = new Random();
+
 		node = new Node(name + "Node");
 		root = new Node(name + "Root");
 
@@ -80,6 +83,7 @@ public class Lune implements Corp{
 		// System.out.println(name + " " + inclinaisonOrbitale + " " + inclinationRadians);
 		node.rotate(-FastMath.HALF_PI, 0, 0);
 		root.rotate(inclinationRadians, 0f, 0f);
+		root.rotate(0f, random.nextFloat()*2*(float)Math.PI, 0f);
 	}
 
 	public void rotate(double time){
