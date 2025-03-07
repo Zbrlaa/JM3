@@ -21,6 +21,8 @@ import com.jme3.scene.VertexBuffer;
 import com.jme3.scene.shape.Sphere;
 import com.jme3.texture.Texture;
 import com.jme3.util.BufferUtils;
+import com.jme3.scene.shape.Cylinder;
+
 
 public class Planet implements Corp{
 	//Obligatoire
@@ -83,9 +85,11 @@ public class Planet implements Corp{
 
 	//Initialisations
 	private void initPlanet(AssetManager assetManager){
-		Sphere sphere = new Sphere(32, 32, (float)(rayonMoyen/(RAYON_MOYEN_TERRE)));
-		sphere.setTextureMode(Sphere.TextureMode.Projected);
+		// Sphere sphere = new Sphere(32, 32, (float)(rayonMoyen/(RAYON_MOYEN_TERRE)));
+		Cylinder sphere = new Cylinder(32, 32, (float)(rayonMoyen/RAYON_MOYEN_TERRE), 0.01f, true);
+		// sphere.setTextureMode(Sphere.TextureMode.Projected);
 		planet = new Geometry(name, sphere);
+		
 		
 		//Utilisation de la texture
 		Material mat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");

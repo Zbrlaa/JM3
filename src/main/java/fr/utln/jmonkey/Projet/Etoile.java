@@ -5,6 +5,7 @@ import com.jme3.material.Material;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Sphere;
+import com.jme3.scene.shape.Cylinder;
 
 public class Etoile implements Corp{
 	private String name;
@@ -31,8 +32,9 @@ public class Etoile implements Corp{
 
 	//Initialisations
 	private void initPlanet(AssetManager assetManager){
-		Sphere sphere = new Sphere(32, 32, radius);
-		sphere.setTextureMode(Sphere.TextureMode.Projected);
+		// Sphere sphere = new Sphere(32, 32, radius);
+		Cylinder sphere = new Cylinder(32, 32, radius, 0.01f, true);
+		// sphere.setTextureMode(Sphere.TextureMode.Projected);
 		planet = new Geometry(name, sphere);
 		
 		//Utilisation de la texture

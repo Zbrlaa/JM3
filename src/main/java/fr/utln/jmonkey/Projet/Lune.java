@@ -6,6 +6,7 @@ import com.jme3.math.FastMath;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Sphere;
+import com.jme3.scene.shape.Cylinder;
 
 public class Lune implements Corp{
 	private String name;
@@ -39,8 +40,9 @@ public class Lune implements Corp{
 	}
 
 	private void initPlanet(AssetManager assetManager){
-		Sphere sphere = new Sphere(32, 32, size);
-		sphere.setTextureMode(Sphere.TextureMode.Projected);
+		// Sphere sphere = new Sphere(32, 32, size);
+		Cylinder sphere = new Cylinder(32, 32, size, 0.01f, true);
+		// sphere.setTextureMode(Sphere.TextureMode.Projected);
 		planet = new Geometry(name, sphere);
 		
 		//Utilisation de la texture
