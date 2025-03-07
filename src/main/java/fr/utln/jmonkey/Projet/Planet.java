@@ -22,14 +22,12 @@ import com.jme3.texture.Texture;
 import com.jme3.util.BufferUtils;
 
 public class Planet implements Corp{
-	//Obligatoire
 	private String name;
-	// private List<Float> anglesSelf;//Rotation sur elle-même
 
-	//Créés ultérieurement
+	//Créés à l'init
 	private Geometry planet;
 	private Geometry orbite;
-	private Node root;//Noyau pour Translation/Rotation
+	private Node root;//Noyau autour du quel elle tourne
 	private Node node;//Noyau pour ses lunes
 	private List<Lune> lunes;
 
@@ -46,6 +44,7 @@ public class Planet implements Corp{
 	private double densite;
 	private double rotation;
 
+	//Constante pour echelonner
 	public static double RAYON_MOYEN_TERRE = 6371.0084;
 	public static double DEMI_GRAND_AXE_TERRE = 149598023;
 	
@@ -53,6 +52,7 @@ public class Planet implements Corp{
 	public Planet(String name, AssetManager assetManager){
 		this.name = name;
 
+		//Appel à l'api pour recup les infos des planetes
 		if (Set.of("terre","mercure","venus","mars","jupiter","saturne","neptune","uranus").contains(name.toLowerCase())){
 			Api api = new Api();
 			JSONObject planetData = api.getPlanetData(name.toLowerCase());
@@ -74,6 +74,7 @@ public class Planet implements Corp{
 			}
 		}
 
+		//Appel fonctions initialisation
 		initNodes();
 		initPlanet(assetManager);
 		initOrbite(assetManager);
@@ -82,21 +83,22 @@ public class Planet implements Corp{
 
 	//Initialisations
 	private void initPlanet(AssetManager assetManager){
+		//Creation de la forme
 		float r = (float)(rayonMoyen/(RAYON_MOYEN_TERRE));
 		System.out.println(name + " " + r);
 		Sphere sphere = new Sphere(32, 32, r);
 		sphere.setTextureMode(Sphere.TextureMode.Projected);
 		planet = new Geometry(name, sphere);
 		
-		//Utilisation de la texture
+		//Ajout texture
 		Material mat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
 		mat.setTexture("DiffuseMap", assetManager.loadTexture("Planets/" + name + ".jpg"));
-
 		planet.setMaterial(mat);
 		node.attachChild(planet);
 	}
 
 	private void initNodes(){
+		//Creation et rotation des noeuds
 		node = new Node(name + "Node");
 		root = new Node(name + "Root");
 
@@ -105,6 +107,7 @@ public class Planet implements Corp{
 		node.rotate(FastMath.DEG_TO_RAD*(float)inclinaisonAxiale,0f,0f);
 	}
 
+	//Ajout et attachement des lunes
 	public void addlune(Lune lune){
 		if (lunes == null) {
 			lunes = new ArrayList<>();
@@ -113,55 +116,53 @@ public class Planet implements Corp{
 		this.node.attachChild(lune.getRoot());
 	}
 
-
+	//Mouvement elliptique
 	public void rotate(double time){
-		float e = (float)excentricite; // Excentricité de la Terre
-		float a = (float)(30 * demiGrandAxe/DEMI_GRAND_AXE_TERRE); // Demi-grand axe
-		float T = (float)periodeOrbitale; // Période orbitale
+		float e = (float)excentricite;
+		float a = (float)(30 * demiGrandAxe/DEMI_GRAND_AXE_TERRE);
+		float T = (float)periodeOrbitale;
 		T *= 24 * 3600 * 1000;
 
-		//Anomalie moyenne (M)
+		//Anomalies
 		float M = (float) (2 * Math.PI * (time% T) / T);
-		//Anomalie vraie θ
 		float theta = M + 2 * e * (float) Math.sin(M) + 1.25f * e * e * (float) Math.sin(2 * M);
-
+		//Calcul coordonnées pour translation
 		float x = a * (float) Math.cos(-theta) - e*a;
 		float z = a * (float) Math.sqrt(1 - e * e) * (float) Math.sin(-theta);
-		// System.out.println(name+" "+x+" "+z);
 		Vector3f newPos = new Vector3f(x, 0f, z);
 		node.setLocalTranslation(newPos);
+		// System.out.println(name+" "+x+" "+z);
 	}
 
+	//Rotation sur elle-meme
 	public void rotateSelf(double time){
+		//Calcul avec temps de rotation en jour puis rotate
 		float angle = FastMath.DEG_TO_RAD * (float)time * 360f / ((float)rotation*3600f*1000);
 		planet.rotate(0f, 0f, angle);
 		// System.out.println("Rotate " + name + " " + angle);
 	}
 
+	//Mouvement des lunes
 	public void rotateLune(double time){
+		//Appel a leur propre fonction de deplacement
 		if (lunes != null){
 			for(Lune l : lunes){
 				l.rotate(time);
-				// m.rotateSelf(tpf);
 			}
 		}
 	}
 
+	//Creation des orbites avec un mesh selon mouvement elliptique
 	public void initOrbite(AssetManager assetManager){
-		// Nombre d'échantillons (points)
 		int samples = 256;
 		float a = (float)(30 * demiGrandAxe/DEMI_GRAND_AXE_TERRE);
-		System.out.println(name + " orbite " + demiGrandAxe + " " + a);
-
-		// Calcul du demi-petit axe à partir du demi-grand axe et de l'excentricité
+		// System.out.println(name + " orbite " + demiGrandAxe + " " + a);
 		float demiPetitAxe = a * (float) Math.sqrt(1 - Math.pow(excentricite, 2d));
 
-		// Création du Mesh
 		Mesh mesh = new Mesh();
 		Vector3f[] vertices = new Vector3f[samples + 1]; // +1 pour fermer l'ellipse
 		int[] indices = new int[samples * 2];
 
-		// Calcul des positions des sommets
 		for (int i = 0; i < samples; i++) {
 			float angle = (float) (2 * Math.PI * i / samples);
 			float x = (float) a * (float) Math.cos(angle) - (float)(excentricite)*a; // Correction du facteur d'échelle
@@ -171,18 +172,14 @@ public class Planet implements Corp{
 			indices[i * 2] = i;
 			indices[i * 2 + 1] = (i + 1) % samples; // Relie les points
 		}
-
-		// Fermeture de l'ellipse
 		vertices[samples] = vertices[0]; 
 
-		// Appliquer les sommets et les indices au Mesh
 		mesh.setBuffer(VertexBuffer.Type.Position, 3, BufferUtils.createFloatBuffer(vertices));
 		mesh.setBuffer(VertexBuffer.Type.Index, 2, BufferUtils.createIntBuffer(indices));
 		mesh.setMode(Mesh.Mode.Lines); // Mode "Lines" pour dessiner une ellipse
 		mesh.updateBound();
 		mesh.updateCounts();
 
-		// Création de la géométrie
 		orbite = new Geometry("Ellipse"+name, mesh);
 		Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
 		mat.setTexture("ColorMap", assetManager.loadTexture("Planets/" + name + ".jpg"));
@@ -191,9 +188,10 @@ public class Planet implements Corp{
 		root.attachChild(orbite);
 	}
 
+	//Ajout des anneaux avec un mesh
 	public void addRings(AssetManager assetManager, String nomTexture) {
 		Mesh ringMesh = new Mesh();
-		int segments = 128;
+		int segments = 512;
 		Vector3f[] sommets = new Vector3f[segments*2];
 		Vector2f[] coords = new Vector2f[segments*2];
 

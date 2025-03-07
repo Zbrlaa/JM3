@@ -6,18 +6,22 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
+//Classe API pour recuperer les infos voulu sur les planetes
+//Pas eu le temps de l'adapter pour recup les infos des lunes à chaque fois
 public class Api {
 	private static final String CACHE_FILE = "planetes.json";
 
+	//Fonction qui gère comment récuperer : local ou distant (à cause du proxy)
 	public JSONObject getPlanetData(String planetName) {
 		JSONObject allPlanets = loadCache();
 
+		//Si les infos sont déjà en local on les recup
 		if (allPlanets.has(planetName)) {
 			return allPlanets.getJSONObject(planetName);
 		}
 		
+		//Sinon on appele l'api et on save en local
 		JSONObject planetData = fetchPlanetData(planetName);
-
 		if (planetData != null) {
 			allPlanets.put(planetName, planetData);
 			saveCache(allPlanets);
@@ -26,6 +30,7 @@ public class Api {
 		return planetData;
 	}
 
+	//Appel à l'api selon la planete voulue
 	private JSONObject fetchPlanetData(String planetName) {
 		try {
 			@SuppressWarnings("deprecation")
@@ -57,6 +62,7 @@ public class Api {
 		return null;
 	}
 
+	//Recuperation des données qui m'intéresse pour ne pas tout mettre en local
 	private JSONObject extractUsefulData(JSONObject json) {
 		JSONObject usefulData = new JSONObject();
 		
@@ -77,6 +83,7 @@ public class Api {
 		return usefulData;
 	}
 
+	//Recuperation des données en local
 	private JSONObject loadCache() {
 		File file = new File(CACHE_FILE);
 		if (!file.exists()) return new JSONObject();
@@ -94,9 +101,10 @@ public class Api {
 		return new JSONObject();
 	}
 
+	//Sauvegarde des données de l'api vers mon fichier json, car l'api est inaccessible avec le proxy
 	private void saveCache(JSONObject data) {
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(CACHE_FILE))) {
-			writer.write(data.toString(2)); // Format JSON lisible
+			writer.write(data.toString(2));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

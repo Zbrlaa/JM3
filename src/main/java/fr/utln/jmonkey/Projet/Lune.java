@@ -12,7 +12,10 @@ import com.jme3.scene.Mesh;
 import com.jme3.util.BufferUtils;
 import com.jme3.scene.VertexBuffer;
 
+//Gestion des lunes de la meme facon que les planetes mais les informations sont rentrées à la main et pas avec l'api
 public class Lune implements Corp{
+	//A peut pret les meme attributs et methodes que les planetes
+	//Mais pas de possibilité d'héritage entre lune et planete
 	private String name;
 	private double revolution;
 	private float inclinaisonOrbitale;
@@ -59,7 +62,6 @@ public class Lune implements Corp{
 		sphere.setTextureMode(Sphere.TextureMode.Projected);
 		planet = new Geometry(name, sphere);
 		
-		//Utilisation de la texture
 		Material mat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
 		mat.setTexture("DiffuseMap", assetManager.loadTexture("Planets/"+ name +".jpg"));
 
@@ -87,8 +89,6 @@ public class Lune implements Corp{
 	}
 
 	public void initOrbite(AssetManager assetManager){
-		// Nombre d'échantillons (points)
-		
 		int samples = 128;
 		float a = (float)(Planet.RAYON_MOYEN_TERRE * demiGrandAxe/Planet.DEMI_GRAND_AXE_TERRE);
 		if(name.equals("Lune")){
@@ -100,39 +100,31 @@ public class Lune implements Corp{
 		if(name.equals("Europa")){
 			a *= 1.01;
 		}
-
 		System.out.println(name + " orbite " + demiGrandAxe + " " + a);
 
-		// Calcul du demi-petit axe à partir du demi-grand axe et de l'excentricité
 		float demiPetitAxe = a * (float) Math.sqrt(1 - Math.pow(excentricite, 2d));
-
-		// Création du Mesh
 		Mesh mesh = new Mesh();
-		Vector3f[] vertices = new Vector3f[samples + 1]; // +1 pour fermer l'ellipse
+		Vector3f[] vertices = new Vector3f[samples + 1];
 		int[] indices = new int[samples * 2];
 
-		// Calcul des positions des sommets
 		for (int i = 0; i < samples; i++) {
 			float angle = (float) (2 * Math.PI * i / samples);
-			float x = (float) a * (float) Math.cos(angle) - (float)(excentricite)*a; // Correction du facteur d'échelle
+			float x = (float) a * (float) Math.cos(angle) - (float)(excentricite)*a;
 			float y = demiPetitAxe * (float) Math.sin(angle);
 
 			vertices[i] = new Vector3f(x, y, 0);
 			indices[i * 2] = i;
-			indices[i * 2 + 1] = (i + 1) % samples; // Relie les points
+			indices[i * 2 + 1] = (i + 1) % samples;
 		}
 
-		// Fermeture de l'ellipse
 		vertices[samples] = vertices[0]; 
 
-		// Appliquer les sommets et les indices au Mesh
 		mesh.setBuffer(VertexBuffer.Type.Position, 3, BufferUtils.createFloatBuffer(vertices));
 		mesh.setBuffer(VertexBuffer.Type.Index, 2, BufferUtils.createIntBuffer(indices));
-		mesh.setMode(Mesh.Mode.Lines); // Mode "Lines" pour dessiner une ellipse
+		mesh.setMode(Mesh.Mode.Lines);
 		mesh.updateBound();
 		mesh.updateCounts();
 
-		// Création de la géométrie
 		orbite = new Geometry("Ellipse"+name, mesh);
 		Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
 		mat.setTexture("ColorMap", assetManager.loadTexture("Planets/" + name + ".jpg"));

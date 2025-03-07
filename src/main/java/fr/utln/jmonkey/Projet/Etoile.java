@@ -6,11 +6,14 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Sphere;
 
+//Unpeu comme la classe planete mais utilisée seulement pour creer le soleil (seule étoile)
 public class Etoile implements Corp{
+	//Info rentrée à la main et non par l'api
+	//N'a besoin que de très peu de methode
 	private String name;
 	private Geometry planet;
-	private Node root;//Noyau pour Translation/Rotation
-	private Node node;//Noyau pour ses lunes
+	private Node root;
+	private Node node;
 	private float radius;
 	private double rayonMoyen;
 	private double masse;
@@ -35,7 +38,6 @@ public class Etoile implements Corp{
 		sphere.setTextureMode(Sphere.TextureMode.Projected);
 		planet = new Geometry(name, sphere);
 		
-		//Utilisation de la texture
 		Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
 		mat.setTexture("ColorMap", assetManager.loadTexture("Planets/" + name + ".jpg"));
 
