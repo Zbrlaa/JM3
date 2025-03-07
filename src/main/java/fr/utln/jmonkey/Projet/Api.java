@@ -28,6 +28,7 @@ public class Api {
 
 	private JSONObject fetchPlanetData(String planetName) {
 		try {
+			@SuppressWarnings("deprecation")
 			URL url = new URL("https://api.le-systeme-solaire.net/rest/bodies/" + planetName);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");

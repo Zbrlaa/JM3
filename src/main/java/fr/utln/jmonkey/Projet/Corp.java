@@ -9,4 +9,8 @@ public interface Corp {
 	public Node getRoot();
 	public Node getNode();
 	public double size();
+	public double getMasse();
+	public double getTemperatureK();
+	public double getRayonMoyen();
+	public double getGravite();
 }
