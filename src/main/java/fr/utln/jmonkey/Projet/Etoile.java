@@ -87,4 +87,9 @@ public class Etoile implements Corp{
 	public double getTemperatureK() {
 		return temperatureK;
 	}
+
+	public Geometry getOrbite() {
+		Geometry orbite = new Geometry("Orbite"+name, null);
+		return orbite;
+	}
 }

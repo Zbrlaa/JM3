@@ -80,8 +80,8 @@ public class SystemeSolaire extends SimpleApplication {
 		GuiGlobals.initialize(this); // Initialisation Lemur
 		dateLabel = new Label("Date");
 		dateLabel.setFontSize(30);
-		dateLabel.setColor(ColorRGBA.Red);
-		dateLabel.setLocalTranslation(settings.getWidth()/2 - 100 , settings.getHeight() - 50, 0);
+		dateLabel.setColor(ColorRGBA.White);
+		dateLabel.setLocalTranslation(settings.getWidth()/2 - 150 , settings.getHeight() - 50, 0);
 		guiNode.attachChild(dateLabel);
 
 		//Lumiere Soleil
@@ -93,7 +93,7 @@ public class SystemeSolaire extends SimpleApplication {
 
 		// Lumière d'ambiance faible pour voir les asteroides et planetes éloignées
 		AmbientLight ambient = new AmbientLight();
-		ambient.setColor(ColorRGBA.White.mult(0.04f));
+		ambient.setColor(ColorRGBA.White.mult(0.02f));
 		rootNode.addLight(ambient);
 
 		//Creation de la liste de Corps et création soleil + planetes
@@ -260,12 +260,12 @@ public class SystemeSolaire extends SimpleApplication {
 	//Desactiver l'affichage des orbites
 	private void hideOrbite() {
 		for(Corp p : planets){
-			if(p.getClass() == Planet.class){
-				if(((Planet)p).getOrbite().getCullHint().equals(Spatial.CullHint.Always)){
-					((Planet)p).getOrbite().setCullHint(Spatial.CullHint.Inherit);
+			if(!p.getClass().equals(Etoile.class)){
+				if(p.getOrbite().getCullHint().equals(Spatial.CullHint.Always)){
+					p.getOrbite().setCullHint(Spatial.CullHint.Inherit);
 				}
 				else{
-					((Planet)p).getOrbite().setCullHint(Spatial.CullHint.Always);
+					p.getOrbite().setCullHint(Spatial.CullHint.Always);
 				}
 			}
 		}

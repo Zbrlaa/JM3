@@ -170,4 +170,8 @@ public class Lune implements Corp{
 	public double getTemperatureK() {
 		return temperatureK;
 	}
+
+	public Geometry getOrbite() {
+		return orbite;
+	}
 }

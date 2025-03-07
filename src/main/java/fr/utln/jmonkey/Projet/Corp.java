@@ -14,4 +14,5 @@ public interface Corp {
 	public double getTemperatureK();
 	public double getRayonMoyen();
 	public double getGravite();
+	public Geometry getOrbite();
 }
